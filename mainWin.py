@@ -1,17 +1,23 @@
 
 
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog
+
 from ui.mainWin import *
 
 
 class MainWin(QMainWindow):
     def __init__(self, parent=None):
         super(MainWin, self).__init__(parent)
-        ui = Ui_MainWindow()
-        ui.setupUi(self)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
 
         self.setWindowTitle('装修管理')
+        self.ui.actNewProject.triggered.connect(self.newProject)
+
+    def newProject(self):
+        openFile = QFileDialog().getSaveFileName(None, '新建工程', '', '*.dms')
+
 
 
 if __name__ == '__main__':
