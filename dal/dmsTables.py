@@ -56,7 +56,7 @@ class DB_Struct_Name(Base):
 
 ### 装修类型
 class DB_Decorate_Type(Base):
-    __tablename__ = "struct_name"
+    __tablename__ = "decorate_type"
 
     id = Column(Integer, primary_key=true)
     order = Column(Integer)

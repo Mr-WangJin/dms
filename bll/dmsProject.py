@@ -1,40 +1,26 @@
-
-#工程类
-
+# 工程类
 from bll.dmsContext import dms_context
+from dal import dmsDatabase
 from dal.dmsDatabase import DMSDatabase
 
 
-# 新建工程
-def newProject(fileName):
-	database = DMSDatabase()
-	database.openDatabase(fileName)
-	dms_context.setProject(DMSProject(database))
+def newProject(file_name):
+    database = DMSDatabase()
+    database.newDatabase(file_name)
+    dms_context.setProject(DMSProject(database))
 
 
-# 打开工程
-def openProject(fileName):
-	pass
-
-
-# 打开工程
-def openProject(self, fileName):
-	pass
+def openProject(file_name):
+    database = DMSDatabase()
+    database.openDatabase(file_name)
+    dms_context.setProject(DMSProject(database))
 
 
 class DMSProject(object):
+    dmsDatabase = None
 
-	dmsDatabase = None
-	
-	def __init__(self, database):
-		self.dmsDatabase = database
+    def __init__(self, database):
+        self.dmsDatabase = database
 
-
-	def getTableList(self, table):
-		return dmsDatabase.session.query(table).all()
-
-
-
-		
-
-
+    def getTableList(self, table):
+        return dmsDatabase.session.query(table).all()
