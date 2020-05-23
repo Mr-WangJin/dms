@@ -16,8 +16,10 @@ class DMSDatabase(object):
         pass
 
     # 打开数据库
-    def openDatabase(self, fileName):
-        engine = sa.create_engine(fileName)
+    def openDatabase(self, filename):
+        self.fileName = filename
+        sqlite_file_name = "sqlite:///" + self.fileName
+        engine = sa.create_engine(sqlite_file_name)
         # Base.metadata.create_all(engine)
         dbSession = sessionmaker(bind=engine)
         session = dbSession()

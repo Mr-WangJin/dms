@@ -31,7 +31,10 @@ class Ui_MainWindow(object):
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
         self.actNewProject = QtWidgets.QAction(MainWindow)
         self.actNewProject.setObjectName("actNewProject")
+        self.actOpenProject = QtWidgets.QAction(MainWindow)
+        self.actOpenProject.setObjectName("actOpenProject")
         self.menuFile.addAction(self.actNewProject)
+        self.menuFile.addAction(self.actOpenProject)
         self.menubar.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -46,3 +49,6 @@ class Ui_MainWindow(object):
         self.actNewProject.setText(_translate("MainWindow", "新建工程"))
         self.actNewProject.setToolTip(_translate("MainWindow", "新建工程"))
         self.actNewProject.setShortcut(_translate("MainWindow", "Ctrl+N"))
+        self.actOpenProject.setText(_translate("MainWindow", "打开工程"))
+        self.actOpenProject.setToolTip(_translate("MainWindow", "打开工程"))
+        self.actOpenProject.setShortcut(_translate("MainWindow", "Ctrl+O"))

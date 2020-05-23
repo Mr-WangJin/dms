@@ -31,6 +31,7 @@
      <string>文件</string>
     </property>
     <addaction name="actNewProject"/>
+    <addaction name="actOpenProject"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -55,6 +56,17 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actOpenProject">
+   <property name="text">
+    <string>打开工程</string>
+   </property>
+   <property name="toolTip">
+    <string>打开工程</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
  </widget>

@@ -4,13 +4,13 @@ from dal import dmsDatabase
 from dal.dmsDatabase import DMSDatabase
 
 
-def newProject(file_name):
+def newDMSProject(file_name):
     database = DMSDatabase()
     database.newDatabase(file_name)
     dms_context.setProject(DMSProject(database))
 
 
-def openProject(file_name):
+def openDMSProject(file_name):
     database = DMSDatabase()
     database.openDatabase(file_name)
     dms_context.setProject(DMSProject(database))
