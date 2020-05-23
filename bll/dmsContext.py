@@ -23,3 +23,9 @@ def dmsProject():
 
 def dmsDatabase():
     return  glb_dmsContext.getProject().dmsDatabase
+
+# 判断工程是否为空
+def isProjectNull():
+    if glb_dmsContext.getProject() == None:
+        return True
+    return False
