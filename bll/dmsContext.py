@@ -12,6 +12,8 @@ class DMSContext(object):
     # 设置工程
     def setProject(self, project):
         self.project = project
+    def getProject(self):
+        return self.project
 
 
 # 上下文全局变量

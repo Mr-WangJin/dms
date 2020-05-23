@@ -23,4 +23,12 @@ class DMSProject(object):
         self.dmsDatabase = database
 
     def getTableList(self, table):
-        return dmsDatabase.session.query(table).all()
+        table_list = self.dmsDatabase.session.query(table).all()
+        return table_list
+
+    def addRecord(self, record):
+        if record == None:
+            return 0
+        self.dmsDatabase.addRecord(record)
+
+
