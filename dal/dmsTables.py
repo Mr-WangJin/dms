@@ -19,24 +19,25 @@ class DB_Building(Base):
     def __repr__(self):
         return "<User(id= '%s', name='%s')>" % (self.id, self.name)
 
-### 户型
+# ## 户型
 # class DB_StructType(Base):
 # 	__tablename__ = "struct_type"
-
+#
 # 	id = Column(Integer, primary_key=True)
 #     name = Column(String(32))
-
+#
 # 	building = relationship("building", backref="my_struct_type")
-#
-# ### 单元
-# class DB_Building_Unit(Base):
-#     __tablename__ = "building_unit"
-#     id = Column(Integer, primary_key=True)
-#     name = Column(String(32))
-#     building_id = Column(Integer, ForeignKey("building.id"))
-#     building_id = relationship("building", backref="my_building")
-#
-#
+
+### 单元
+class DB_Building_Unit(Base):
+    __tablename__ = "building_unit"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(32))
+
+    building_id = Column(Integer, ForeignKey("building.id"))
+    building = relationship('DB_Building', backref='my.building')
+
+
 # ### 楼层
 # class DB_Floor(Base):
 #     __tablename__ = "floor"

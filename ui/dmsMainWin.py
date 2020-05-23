@@ -1,5 +1,5 @@
 # encoding: utf-8
-# module ui
+
 
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QHBoxLayout, QVBoxLayout
 

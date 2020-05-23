@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 import sys
 from PyQt5.QtWidgets import QApplication
 from ui.dmsMainWin import DMSMainWin

@@ -1,6 +1,5 @@
 # 上下文类
 
-
 class DMSContext(object):
     project = None
 
@@ -17,4 +16,10 @@ class DMSContext(object):
 
 
 # 上下文全局变量
-dms_context = DMSContext()
+glb_dmsContext = DMSContext()
+
+def dmsProject():
+    return glb_dmsContext.getProject()
+
+def dmsDatabase():
+    return  glb_dmsContext.getProject().dmsDatabase

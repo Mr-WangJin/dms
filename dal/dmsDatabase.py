@@ -48,9 +48,19 @@ class DMSDatabase(object):
     def getSession(self):
         return self.session
 
+    # 添加记录
     def addRecord(self, record):
         if record == None or self.session == None:
             return 0
         self.session.add(record)
         self.session.commit()
+
+    # 删除记录
+    def deleteRecord(self, record):
+        if record == None or self.session == None:
+            return 0
+        self.session.delete(record)
+        self.session.commit()
+
+
 
