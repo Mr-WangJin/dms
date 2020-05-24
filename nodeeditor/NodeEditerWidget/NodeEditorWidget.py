@@ -73,25 +73,25 @@ class NodeEditorWidget(QMainWindow):
         """
         pass
 
-    def parse2Graph(self, tasksInfo):
-        """
-        用于从数据库读取计划模版，解析网络关系，构建连接线。
-        !!!  sequenceID要在包内唯一
-        1、构件图结构
-            { 任务序号1，[前置任务1,前置任务2] ,
-              任务序号2，[前置任务1,前置任务2] ,
-              任务序号3，[前置任务1,前置任务2] }
-        2、计算节点布局
-        3、添加连接线
-        :param tasksInfo:
-        :return:
-        """
-        graph: {str, []} = dict
-        for taskID, taskSequenceID, taskName, aheadTask, duration in tasksInfo:
-            graph['taskSequenceID'] = []
-
-        for taskID, taskSequenceID, taskName, aheadTask, duration in tasksInfo:
-            graph[taskSequenceID].append()
+    # def parse2Graph(self, tasksInfo):
+    #     """
+    #     用于从数据库读取计划模版，解析网络关系，构建连接线。
+    #     !!!  sequenceID要在包内唯一
+    #     1、构件图结构
+    #         { 任务序号1，[前置任务1,前置任务2] ,
+    #           任务序号2，[前置任务1,前置任务2] ,
+    #           任务序号3，[前置任务1,前置任务2] }
+    #     2、计算节点布局
+    #     3、添加连接线
+    #     :param tasksInfo:
+    #     :return:
+    #     """
+    #     graph: {str, []} = dict
+    #     for taskID, taskSequenceID, taskName, aheadTask, duration in tasksInfo:
+    #         graph['taskSequenceID'] = []
+    #
+    #     for taskID, taskSequenceID, taskName, aheadTask, duration in tasksInfo:
+    #         graph[taskSequenceID].append()
 
     def parsePerTaskExpress(self, pre_task: str):
         """
