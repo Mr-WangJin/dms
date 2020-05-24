@@ -1,8 +1,10 @@
 import sys
 
 from PyQt5.QtCore import Qt, QPoint
-from PyQt5.QtWidgets import QWidget, QMainWindow, QHBoxLayout, QApplication
+from PyQt5.QtWidgets import QWidget, QMainWindow, QHBoxLayout, QApplication, QTableWidget
 
+from bll.dmsContext import dmsProject
+from dal.dmsTables import DB_Decorate_Type
 from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GEdge import GEdge
 from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GNode import GNode
 from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GScene import GScene
@@ -69,11 +71,10 @@ class NodeEditorWidget(QMainWindow):
         """
         pass
 
-    def loadData(self):
-        pass
-
-    def setAllNodesPos(self):
-        pass
+    def saveData(self):
+        for item in self.nodesDict.values():
+            task_id, node_x, node_y = item.getNodePosition()
+            # Todo update to dataBase
 
     def parse2Graph(self, tasksInfo):
         """
@@ -95,11 +96,36 @@ class NodeEditorWidget(QMainWindow):
         for taskID, taskSequenceID, taskName, aheadTask, duration in tasksInfo:
             graph[taskSequenceID].append()
 
-    def parseSSFS(self, aheadTask: str):
-        if len(aheadTask) != 0: return
-        aheadTaskList = aheadTask.split(',')
+    # def parseSSFS(self, aheadTask: str):
+    #     if len(aheadTask) != 0: return
+    #     aheadTaskList = aheadTask.split(',')
 
-
+    def updateTaskNode(self):
+        """
+        当切换页面或者编辑任务或，触发此方法，用于刷新数据。
+        1、清空页面
+        2、加载数据
+        3、绘制节点
+        4、绘制连线
+        :return:
+        """
+        # 1
+        self.scene.clear()
+        # 2
+        decorateTaskList = dmsProject().getTableList(DB_Decorate_Type)
+        # 3
+        decorateTask: DB_Decorate_Type
+        for decorateTask in decorateTaskList:
+            node = GNode(decorateTask)
+            node.setPos(decorateTask.node_x, decorateTask.node_y)
+            self.nodesDict[node.order] = node
+        # 4 Todo
+        for decorateTask in decorateTaskList:
+            if decorateTask.pre_task != "":
+                preTaskOrderList = str(decorateTask.pre_task).split(',')
+                for preTask in preTaskOrderList:
+                    if preTask.__contains__('FS') or preTask.__contains__("fs"):
+                        edge = GEdge()
 
 
 if __name__ == '__main__':

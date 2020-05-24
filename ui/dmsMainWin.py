@@ -9,7 +9,6 @@ from ui.ui_mainWin import Ui_MainWindow
 
 
 class DMSMainWin(QMainWindow):
-
     horizonlayout = None
     buildingWgt = None
 
@@ -46,16 +45,9 @@ class DMSMainWin(QMainWindow):
         self.horizonlayout = QVBoxLayout(self)
         self.buildingWgt = DMSBuildingWgt(self)
         self.horizonlayout.addWidget(self.buildingWgt)
-        self.centralWidget().setLayout (self.horizonlayout)
+        self.centralWidget().setLayout(self.horizonlayout)
 
         self.updateUiEnabled()
 
     def updateUiEnabled(self):
         self.buildingWgt.updateUiEnabled()
-
-
-
-
-
-
-

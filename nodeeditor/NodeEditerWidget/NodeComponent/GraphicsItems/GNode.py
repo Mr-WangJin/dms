@@ -5,7 +5,8 @@ from PyQt5.QtCore import QRectF
 from PyQt5.QtGui import QFont, QColor, QBrush, QPen, QPainter, QPainterPath
 from PyQt5.QtWidgets import QStyle, QGraphicsItem, QGraphicsTextItem, QGraphicsLineItem
 
-from NodeEditerWidget.NodeComponent.GraphicsItems.GSocket import GSocket
+from dal.dmsTables import DB_Decorate_Type
+from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GSocket import GSocket
 
 
 class GNode(QGraphicsItem):
@@ -44,7 +45,7 @@ class GNode(QGraphicsItem):
     brush = QBrush(QColor("#C7EEE7"))
     radius = 6
 
-    def __init__(self, taskInfo):
+    def __init__(self, taskInfo: DB_Decorate_Type):
         """
         1、本图例为节点图例，内有多个子图例，该自图例在实例化时，必须要注意传入self，否则子图例不知道父图例是谁，
         就无法和父图例一同展示到scene上。
@@ -53,9 +54,9 @@ class GNode(QGraphicsItem):
         :param nodeProxy:
         """
         super().__init__()
-        self.gID = taskInfo["taskID"]
-        self.taskSquenceID = taskInfo["taskID"]
-        self.gTaskName = QGraphicsTextItem(taskInfo["taskName"], self)
+        self.gID = taskInfo.id
+        self.order = taskInfo.order
+        self.gTaskName = QGraphicsTextItem(taskInfo.name, self)
         self.gAmount = QGraphicsTextItem('总空间数量', self)
         self.gTeamCount = QGraphicsTextItem('班组数量', self)
         self.gIsFlowable = QGraphicsTextItem('是否可流水', self)
@@ -131,13 +132,15 @@ class GNode(QGraphicsItem):
         painter.setBrush(self.brush)
         painter.drawPath(path)
         option.state = QStyle.State_None
-        self.getStartSocketPositioon()
 
-    def getStartSocketPositioon(self,):
+    def getStartSocketPosition(self, ):
         # print(self.mapToScene(self.gStartSocket.pos().toPoint()))
         return self.mapToScene(self.gStartSocket.pos().toPoint())
 
-    def getFinishSocketPosition(self,):
-        print(self.mapToScene(self.gFinishSocket.pos().toPoint()))
+    def getFinishSocketPosition(self, ):
+        # print(self.mapToScene(self.gFinishSocket.pos().toPoint()))
         return self.mapToScene(self.gFinishSocket.pos().toPoint())
 
+    def getNodeData(self):
+        point = self.mapToScene(self.pos().toPoint())
+        return self.gID, self.gTaskName, self.x(), point.y()

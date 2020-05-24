@@ -1,6 +1,6 @@
 import sys
 
-from PyQt5.QtCore import Qt, QPointF
+from PyQt5.QtCore import Qt, QPointF, QPoint
 from PyQt5.QtGui import QPen, QColor, QPainterPath, QBrush
 from PyQt5.QtWidgets import QGraphicsPathItem, QGraphicsItem, QApplication
 
@@ -14,9 +14,8 @@ class GEdge(QGraphicsPathItem):
     pen = QPen(QColor('#ffffff'), 3)
     selected_pen = QPen(QColor('#222222'), 3)
 
-    def __init__(self, edgeProxy):
+    def __init__(self, startPoint: QPoint, endPoint: QPoint):
         super().__init__()
-        self.edgeProxy = edgeProxy
         '''socket 用于在绑定了socket情况下的连接线定位'''
         self.startGSocket = None
         self.endGSocket = None
