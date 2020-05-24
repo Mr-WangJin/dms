@@ -2,13 +2,15 @@
 
 import sqlalchemy as sa
 from sqlalchemy import MetaData
+from sqlalchemy import Table
+from sqlalchemy.schema import *
 from sqlalchemy.engine import Engine
 from dal.dmsTables import *
 from sqlalchemy.orm import *
 
 
-def getMetadata(engine):
-    return Base.metadata
+# def getMetadata():
+#     return MetaData(bind=db)
 
 
 class DMSDatabase(object):
@@ -81,7 +83,8 @@ class DMSDatabase(object):
     def rollback(self):
         self.session.rollback()
 
-
+    def getMetadata(self):
+        return Base.metadata
 
 
 

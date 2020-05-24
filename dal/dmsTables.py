@@ -1,7 +1,7 @@
 
 # 数据表定义
 
-from sqlalchemy import Integer, Column, String, true, ForeignKey
+from sqlalchemy import Integer, Column, String, true, ForeignKey, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 

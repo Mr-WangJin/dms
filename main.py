@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QApplication
 from ui.dmsMainWin import DMSMainWin
 import traceback
 
+
 class DMSApplication(QApplication):
     def __init__(self, argv):
         super(DMSApplication, self).__init__(argv)
@@ -27,12 +28,14 @@ class DMSApplication(QApplication):
 
         return False
 
+
 def excepthook(exc_type, exc_value, exc_tb):
     tb = "".join(traceback.format_exception(exc_type, exc_value, exc_tb))
     print("error catched!:")
     print("error message: ", tb)
     QtWidgets.QApplication.quit()
     # or QtWidgets.QApplication.exit(0)
+
 
 if __name__ == '__main__':
     # 设置捕获异常

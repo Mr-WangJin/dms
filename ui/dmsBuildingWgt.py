@@ -51,6 +51,13 @@ class DMSBuildingWgt(QWidget):
         dmsDatabase().addRecord(building)
 
         self.updateBuilding()
+        #
+        # meta: MetaData = dmsDatabase().getMetadata()
+        # for var in meta.tables:
+        #     print(var)
+        # aa = DB_Building.metadata
+
+
 
     def deleteBuilding(self):
         item: QTreeWidgetItem = self.ui.treeWidget.currentItem()
