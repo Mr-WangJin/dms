@@ -86,6 +86,9 @@ class DB_Unit_Decorate_Data(Base):
     data = Column(String) # json数据
 
 
+
+
+# 数据库版本
 class DB_Version(object):
     __tablename__ = "db_version"
 

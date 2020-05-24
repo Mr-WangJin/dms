@@ -1,4 +1,4 @@
-#coding=utf-8
+# coding=utf-8
 from bll.dmsContext import glb_dmsContext
 from dal.dmsDatabase import DMSDatabase
 
@@ -25,5 +25,3 @@ class DMSProject(object):
     def getTableList(self, table):
         table_list = self.dmsDatabase.session.query(table).all()
         return table_list
-
-
