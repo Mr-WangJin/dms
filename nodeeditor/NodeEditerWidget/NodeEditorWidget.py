@@ -9,6 +9,7 @@ from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GEdge import GEdge
 from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GNode import GNode
 from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GScene import GScene
 from nodeeditor.NodeEditerWidget.NodeEditorView import NodeEditorView
+import re
 
 
 class NodeEditorWidget(QMainWindow):
@@ -33,14 +34,15 @@ class NodeEditorWidget(QMainWindow):
         self.setCentralWidget(widget)
 
     def addDemoNode(self):
-        taskInfo = {"taskID": "1", "taskName": "任务1"}
-        self.addNode(taskInfo)
-        taskInfo = {"taskID": "2", "taskName": "任务1"}
-        self.addNode(taskInfo)
+        # taskInfo = {"taskID": "1", "taskName": "任务1"}
+        # self.addNode(taskInfo)
+        # taskInfo = {"taskID": "2", "taskName": "任务1"}
+        # self.addNode(taskInfo)
+        pass
 
     def addNode(self, taskInfo):
         """
-
+        功能设想：通过节点对任务搭接关系进行设置。
         :param taskInfo:
         :return:
         1、封装信息
@@ -71,11 +73,6 @@ class NodeEditorWidget(QMainWindow):
         """
         pass
 
-    def saveData(self):
-        for item in self.nodesDict.values():
-            task_id, node_x, node_y = item.getNodePosition()
-            # Todo update to dataBase
-
     def parse2Graph(self, tasksInfo):
         """
         用于从数据库读取计划模版，解析网络关系，构建连接线。
@@ -96,11 +93,23 @@ class NodeEditorWidget(QMainWindow):
         for taskID, taskSequenceID, taskName, aheadTask, duration in tasksInfo:
             graph[taskSequenceID].append()
 
-    # def parseSSFS(self, aheadTask: str):
-    #     if len(aheadTask) != 0: return
-    #     aheadTaskList = aheadTask.split(',')
+    def parsePerTaskExpress(self, pre_task: str):
+        """
+        解析前置任务表达式
+        :param pre_task:已校验过为非空对的前置任务表达式
+        :return:task_order, task_relation
+        """
+        task_order = re.match(r'\d+', pre_task, flags=0)
+        task_relation = re.match(r'\D+', pre_task, flags=0)
+        if task_relation == "":
+            task_relation = 'FS'
+        else:
+            task_relation = str(task_relation).upper()
+        if str(task_relation) == 'FS' or str(task_relation) == 'FF' \
+                or str(task_relation) == 'SS' or str(task_relation) == 'SF':
+            return task_order, task_relation
 
-    def updateTaskNode(self):
+    def updateTaskNode(self, currentBuildingID):
         """
         当切换页面或者编辑任务或，触发此方法，用于刷新数据。
         1、清空页面
@@ -109,23 +118,43 @@ class NodeEditorWidget(QMainWindow):
         4、绘制连线
         :return:
         """
-        # 1
+        # 1、清空页面
         self.scene.clear()
-        # 2
-        decorateTaskList = dmsProject().getTableList(DB_Decorate_Type)
-        # 3
+        # 2、加载数据
+        decorateTaskList = dmsProject().getTableList(DB_Decorate_Type, filter_str=currentBuildingID)
+        # 3、绘制节点
         decorateTask: DB_Decorate_Type
         for decorateTask in decorateTaskList:
             node = GNode(decorateTask)
             node.setPos(decorateTask.node_x, decorateTask.node_y)
             self.nodesDict[node.order] = node
-        # 4 Todo
+        # 4、绘制连线
         for decorateTask in decorateTaskList:
+            currentNodeID = decorateTask.order
+
             if decorateTask.pre_task != "":
                 preTaskOrderList = str(decorateTask.pre_task).split(',')
                 for preTask in preTaskOrderList:
-                    if preTask.__contains__('FS') or preTask.__contains__("fs"):
-                        edge = GEdge()
+                    nodeID, nodeRelation = self.parsePerTaskExpress(preTask)
+                    if nodeRelation == "FS":
+                        edge = GEdge(startPoint=self.nodesDict.get(nodeID).getFinishSocketPosition,
+                                     endPoint=self.nodesDict.get(currentNodeID).getStartSocketPosition())
+                        self.edgesDict[nodeID + nodeRelation + str(currentNodeID)] = edge
+                    elif nodeRelation == "FF":
+                        pass
+                    elif nodeRelation == "SS":
+                        pass
+                    elif nodeRelation == "SF":
+                        pass
+
+            else:
+                return
+
+    def saveTaskNodeDate2DB(self):
+        node: GNode
+        for node in self.nodesDict.values():
+            value = 'order', node.order, node.scenePos().x(), node.scenePos().y()
+            dmsProject().updateRecord(DB_Decorate_Type, value)
 
 
 if __name__ == '__main__':

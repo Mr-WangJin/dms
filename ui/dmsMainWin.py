@@ -11,6 +11,7 @@ from ui.ui_mainWin import Ui_MainWindow
 class DMSMainWin(QMainWindow):
     horizonlayout = None
     buildingWgt = None
+    unitTabWgt = None
 
     def __init__(self, parent=None):
         super(DMSMainWin, self).__init__(parent)
@@ -45,6 +46,7 @@ class DMSMainWin(QMainWindow):
         self.horizonlayout = QVBoxLayout(self)
         self.buildingWgt = DMSBuildingWgt(self)
         self.horizonlayout.addWidget(self.buildingWgt)
+        self.horizonlayout.addWidget(self.unitTabWgt)
         self.centralWidget().setLayout(self.horizonlayout)
 
         self.updateUiEnabled()

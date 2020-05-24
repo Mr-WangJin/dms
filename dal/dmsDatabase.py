@@ -31,7 +31,7 @@ class DMSDatabase(object):
         self.fileName = filename
         sqlite_file_name = "sqlite:///" + self.fileName
         self.__engine__ = sa.create_engine(sqlite_file_name)
-        #Base.metadata.create_all(self.__engine__)
+        # Base.metadata.create_all(self.__engine__)
         db_session = sessionmaker(bind=self.__engine__)
         self.session = db_session()
 
@@ -68,6 +68,12 @@ class DMSDatabase(object):
         self.session.add(record)
         self.session.commit()
 
+    # 更新记录
+    def updateRecord(self, tableName, record):
+        filterName, filterValue, columnName, value = record
+        self.session.query(tableName).filter_by(filterName=filterValue).update({columnName: value})
+        self.session.commit()
+
     # 删除记录
     def deleteRecord(self, record):
         if record is None or self.session is None:
@@ -85,8 +91,3 @@ class DMSDatabase(object):
 
     def getMetadata(self):
         return Base.metadata
-
-
-
-
-
