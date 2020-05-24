@@ -22,6 +22,3 @@ class DMSProject(object):
     def __init__(self, database):
         self.dmsDatabase = database
 
-    def getTableList(self, table):
-        table_list = self.dmsDatabase.session.query(table).all()
-        return table_list

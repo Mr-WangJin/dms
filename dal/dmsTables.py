@@ -19,6 +19,8 @@ class DB_Building(Base):
     def __repr__(self):
         return "<User(id= '%s', name='%s')>" % (self.id, self.name)
 
+
+
 # ## 户型
 # class DB_StructType(Base):
 # 	__tablename__ = "struct_type"

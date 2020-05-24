@@ -1,5 +1,7 @@
 # 上下文类
 
+from dal.dmsDatabase import *
+
 class DMSContext(object):
     project = None
 
