@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QHBoxLayout,
 
 from bll.dmsProject import *
 from ui.dmsBuildingWgt import DMSBuildingWgt
+from ui.dmsUnitWgt import DMSUnitWgt
 from ui.ui_mainWin import Ui_MainWindow
 
 
@@ -45,8 +46,9 @@ class DMSMainWin(QMainWindow):
     def initUi(self):
         self.horizonlayout = QVBoxLayout(self)
         self.buildingWgt = DMSBuildingWgt(self)
+        # self.unitTabWgt = DMSUnitWgt(self)
         self.horizonlayout.addWidget(self.buildingWgt)
-        self.horizonlayout.addWidget(self.unitTabWgt)
+        # self.horizonlayout.addWidget(self.unitTabWgt)
         self.centralWidget().setLayout(self.horizonlayout)
 
         self.updateUiEnabled()

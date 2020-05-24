@@ -31,6 +31,9 @@ class Ui_MainWindow(object):
         self.actNewProject.setObjectName("actNewProject")
         self.actOpenProject = QtWidgets.QAction(MainWindow)
         self.actOpenProject.setObjectName("actOpenProject")
+        self.actEditDecorateType = QtWidgets.QAction(MainWindow)
+        self.actEditDecorateType.setObjectName("actEditDecorateType")
+        # 添加按钮
         self.menuFile.addAction(self.actNewProject)
         self.menuFile.addAction(self.actOpenProject)
         self.menubar.addAction(self.menuFile.menuAction())

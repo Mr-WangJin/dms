@@ -99,14 +99,11 @@ class NodeEditorWidget(QMainWindow):
         :param pre_task:已校验过为非空对的前置任务表达式
         :return:task_order, task_relation
         """
-        task_order = re.match(r'\d+', pre_task, flags=0)
-        task_relation = re.match(r'\D+', pre_task, flags=0)
-        if task_relation == "":
-            task_relation = 'FS'
-        else:
-            task_relation = str(task_relation).upper()
-        if str(task_relation) == 'FS' or str(task_relation) == 'FF' \
-                or str(task_relation) == 'SS' or str(task_relation) == 'SF':
+        task_order = re.match(r'\d+', pre_task, flags=0)  # 前置任务ID
+        task_relation = re.match(r'\D+', pre_task, flags=0)  # 前置任务关系
+        task_relation = 'FS' if task_relation == "" else str(task_relation).upper()
+
+        if str(task_relation) in ["FS", "SS", "SF", "FF"]:
             return task_order, task_relation
 
     def updateTaskNode(self, currentBuildingID):
