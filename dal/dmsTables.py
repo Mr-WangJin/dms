@@ -1,7 +1,7 @@
 
 # 数据表定义
 
-from sqlalchemy import Integer, Column, String, true, ForeignKey
+from sqlalchemy import Integer, Column, String, true, ForeignKey, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -18,6 +18,8 @@ class DB_Building(Base):
 
     def __repr__(self):
         return "<User(id= '%s', name='%s')>" % (self.id, self.name)
+
+
 
 # ## 户型
 # class DB_StructType(Base):

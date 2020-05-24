@@ -1,37 +1,47 @@
 # 数据库类
 
 import sqlalchemy as sa
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import MetaData
+from sqlalchemy import Table
+from sqlalchemy.schema import *
+from sqlalchemy.engine import Engine
 from dal.dmsTables import *
+from sqlalchemy.orm import *
+
+
+# def getMetadata():
+#     return MetaData(bind=db)
 
 
 class DMSDatabase(object):
-    session = None
-    engine = None
-    fileName = ""
+    session: Session = None
+    __engine__: Engine = None
+    fileName: String = ""
 
     # BASE_PATH = "sqlite:///sochi_athletes.sqlite3"
 
     def __init__(self):
         pass
 
+    def getSession(self):
+        return self.session
+
     # 打开数据库
     def openDatabase(self, filename):
         self.fileName = filename
         sqlite_file_name = "sqlite:///" + self.fileName
-        self.engine = sa.create_engine(sqlite_file_name)
-        # Base.metadata.create_all(engine)
-        dbSession = sessionmaker(bind=self.engine)
-        self.session = dbSession()
+        self.__engine__ = sa.create_engine(sqlite_file_name)
+        #Base.metadata.create_all(self.__engine__)
+        db_session = sessionmaker(bind=self.__engine__)
+        self.session = db_session()
 
-
-    #新建数据库
+    # 新建数据库
     def newDatabase(self, filename):
         self.fileName = filename
         sqlite_file_name = "sqlite:///" + self.fileName
-        self.engine = sa.create_engine(sqlite_file_name)
-        Base.metadata.create_all(self.engine)
-        db_session = sessionmaker(bind=self.engine)
+        self.__engine__ = sa.create_engine(sqlite_file_name)
+        Base.metadata.create_all(self.__engine__)
+        db_session = sessionmaker(bind=self.__engine__)
         self.session = db_session()
 
     def closeDatabase(self):
@@ -41,26 +51,42 @@ class DMSDatabase(object):
     def dbVersion(self):
         pass
 
-    # 
-    def getTableList(self, tableName, filter):
-        pass
-
-    def getSession(self):
-        return self.session
+    # 获取表记录
+    # @filter_str ： 过滤条件
+    def getTableList(self, table, filter_str=None):
+        if filter_str is None:
+            table_list = self.session.query(table).all()
+            return table_list
+        # table_list = self.session.query(table).filter(filter_str).one_or_none()
+        table_list = self.session.query(table).filter(filter_str)
+        return table_list
 
     # 添加记录
     def addRecord(self, record):
-        if record == None or self.session == None:
+        if record is None or self.session is None:
             return 0
         self.session.add(record)
         self.session.commit()
 
     # 删除记录
     def deleteRecord(self, record):
-        if record == None or self.session == None:
+        if record is None or self.session is None:
             return 0
         self.session.delete(record)
         self.session.commit()
+
+    # 提交
+    def commit(self):
+        self.session.commit()
+
+    # 撤销
+    def rollback(self):
+        self.session.rollback()
+
+    def getMetadata(self):
+        return Base.metadata
+
+
 
 
 
