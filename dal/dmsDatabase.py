@@ -19,11 +19,13 @@ class DMSDatabase(object):
     def openDatabase(self, filename):
         self.fileName = filename
         sqlite_file_name = "sqlite:///" + self.fileName
-        engine = sa.create_engine(sqlite_file_name)
+        self.engine = sa.create_engine(sqlite_file_name)
         # Base.metadata.create_all(engine)
-        dbSession = sessionmaker(bind=engine)
-        session = dbSession()
+        dbSession = sessionmaker(bind=self.engine)
+        self.session = dbSession()
 
+
+    #新建数据库
     def newDatabase(self, filename):
         self.fileName = filename
         sqlite_file_name = "sqlite:///" + self.fileName
@@ -43,5 +45,22 @@ class DMSDatabase(object):
     def getTableList(self, tableName, filter):
         pass
 
-    def session(self):
+    def getSession(self):
         return self.session
+
+    # 添加记录
+    def addRecord(self, record):
+        if record == None or self.session == None:
+            return 0
+        self.session.add(record)
+        self.session.commit()
+
+    # 删除记录
+    def deleteRecord(self, record):
+        if record == None or self.session == None:
+            return 0
+        self.session.delete(record)
+        self.session.commit()
+
+
+

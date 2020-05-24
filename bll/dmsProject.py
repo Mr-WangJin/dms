@@ -1,19 +1,19 @@
-# 工程类
-from bll.dmsContext import dms_context
-from dal import dmsDatabase
+# coding=utf-8
+from bll.dmsContext import glb_dmsContext
 from dal.dmsDatabase import DMSDatabase
 
 
 def newDMSProject(file_name):
     database = DMSDatabase()
     database.newDatabase(file_name)
-    dms_context.setProject(DMSProject(database))
+    project = DMSProject(database)
+    glb_dmsContext.setProject(project)
 
 
 def openDMSProject(file_name):
     database = DMSDatabase()
     database.openDatabase(file_name)
-    dms_context.setProject(DMSProject(database))
+    glb_dmsContext.setProject(DMSProject(database))
 
 
 class DMSProject(object):
@@ -23,4 +23,5 @@ class DMSProject(object):
         self.dmsDatabase = database
 
     def getTableList(self, table):
-        return dmsDatabase.session.query(table).all()
+        table_list = self.dmsDatabase.session.query(table).all()
+        return table_list
