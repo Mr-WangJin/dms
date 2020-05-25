@@ -12,6 +12,9 @@ from ui.ui_mainWin import Ui_MainWindow
 
 class DMSMainWin(QMainWindow):
     WIDGET_SPACING = 4
+    BUILDINGWGT_WIDTH = 240
+    UNITTABWGT_WIDTH = 400
+    NODEWGT_WIDTH = 400
     horizonlayout = None
     buildingWgt = None
     unitTabWgt = None
@@ -52,11 +55,11 @@ class DMSMainWin(QMainWindow):
         self.horizonlayout.setSpacing(DMSMainWin.WIDGET_SPACING)
 
         self.buildingWgt = DMSBuildingWgt(self)
-        self.buildingWgt.setFixedWidth(240)
+        self.buildingWgt.setFixedWidth(DMSMainWin.BUILDINGWGT_WIDTH)
         self.unitTabWgt = DMSUnitWgt(self)
-        self.unitTabWgt.setMinimumWidth(400)
+        self.unitTabWgt.setMinimumWidth(DMSMainWin.UNITTABWGT_WIDTH)
         self.nodeViewWgt = NodeEditorWidget(self)
-        self.nodeViewWgt.setMinimumWidth(400)
+        self.nodeViewWgt.setMinimumWidth(DMSMainWin.NODEWGT_WIDTH)
 
         self.horizonlayout.addWidget(self.buildingWgt)
         self.horizonlayout.addWidget(self.unitTabWgt)
