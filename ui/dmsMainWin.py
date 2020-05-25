@@ -49,7 +49,7 @@ class DMSMainWin(QMainWindow):
     def initUi(self):
         self.horizonlayout = QHBoxLayout(self)
         self.horizonlayout.setContentsMargins(0, 0, 0, 0)
-        self.horizonlayout.setSpacing(4)
+        self.horizonlayout.setSpacing(DMSMainWin.WIDGET_SPACING)
 
         self.buildingWgt = DMSBuildingWgt(self)
         self.buildingWgt.setFixedWidth(240)
