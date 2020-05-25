@@ -62,7 +62,7 @@ class DMSMainWin(QMainWindow):
         self.horizonlayout.addWidget(self.unitTabWgt)
         self.horizonlayout.addWidget(self.nodeViewWgt)
 
-        self.horizonlayout.setStretch(0, 1)
+        self.horizonlayout.setStretch(0, 0)
         self.horizonlayout.setStretch(1, 1)
         self.horizonlayout.setStretch(2, 1)
         self.centralWidget().setLayout(self.horizonlayout)
