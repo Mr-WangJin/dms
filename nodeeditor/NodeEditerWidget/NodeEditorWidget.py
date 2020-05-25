@@ -1,4 +1,5 @@
 import sys
+from typing import Dict
 
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtWidgets import QWidget, QMainWindow, QHBoxLayout, QApplication, QTableWidget
@@ -18,8 +19,8 @@ class NodeEditorWidget(QMainWindow):
         super().__init__()
         self.view = NodeEditorView()
         self.scene = GScene()
-        self.nodesDict: [str, GNode] = {}
-        self.edgesDict: [str, GEdge] = {}
+        self.nodesDict: Dict[str, GNode] = {}
+        self.edgesDict: Dict[str, GEdge] = {}
         self.__initUI__()
         self.addDemoNode()
 
@@ -127,14 +128,14 @@ class NodeEditorWidget(QMainWindow):
             self.nodesDict[node.order] = node
         # 4、绘制连线
         for decorateTask in decorateTaskList:
-            currentNodeID = decorateTask.order
+            currentNodeID = str(decorateTask.order)
 
             if decorateTask.pre_task != "":
                 preTaskOrderList = str(decorateTask.pre_task).split(',')
                 for preTask in preTaskOrderList:
                     nodeID, nodeRelation = self.parsePerTaskExpress(preTask)
                     if nodeRelation == "FS":
-                        edge = GEdge(startPoint=self.nodesDict.get(nodeID).getFinishSocketPosition,
+                        edge = GEdge(startPoint=self.nodesDict.get(str(nodeID)).getFinishSocketPosition(),
                                      endPoint=self.nodesDict.get(currentNodeID).getStartSocketPosition())
                         self.edgesDict[nodeID + nodeRelation + str(currentNodeID)] = edge
                     elif nodeRelation == "FF":
