@@ -11,7 +11,6 @@ from dal.dmsDatabase import *
 
 
 class DMSBuildingWgt(QWidget):
-
     currentItem: QTreeWidgetItem = None
 
     def __init__(self, parent=None):
@@ -27,21 +26,19 @@ class DMSBuildingWgt(QWidget):
         self.ui.treeWidget.clear()
         building_list = dmsDatabase().getTableList(DB_Building)
 
-        #rootItem = QTreeWidgetItem()
-        #rootItem.setHidden(True)
+        # rootItem = QTreeWidgetItem()
+        # rootItem.setHidden(True)
         building: DB_Building
         for building in building_list:
             item = QTreeWidgetItem()
             item.setText(0, building.name)
             item.setData(0, Qt.UserRole, building)
-            #rootItem.addChild(item)
+            # rootItem.addChild(item)
             self.ui.treeWidget.addTopLevelItem(item)
-
 
     # 获取当前单体
     def getCurrentBuilding(self):
         pass
-
 
     def addNewBuilding(self):
         building = DB_Building()
@@ -57,8 +54,6 @@ class DMSBuildingWgt(QWidget):
         #     print(var)
         # aa = DB_Building.metadata
 
-
-
     def deleteBuilding(self):
         item: QTreeWidgetItem = self.ui.treeWidget.currentItem()
         if not item:
@@ -68,18 +63,11 @@ class DMSBuildingWgt(QWidget):
         index: QModelIndex = self.ui.treeWidget.currentIndex()
         self.ui.treeWidget.takeTopLevelItem(index.row())
 
-        #self.updateBuilding()
+        # self.updateBuilding()
 
     def updateUiEnabled(self):
         enabled = isProjectNull()
         enabled = not enabled
         self.ui.toolBtnAdd.setEnabled(enabled)
         self.ui.toolBtnDelete.setEnabled(enabled)
-
-
-
-
-
-
-
 

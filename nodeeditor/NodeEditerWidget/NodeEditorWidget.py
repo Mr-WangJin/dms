@@ -15,8 +15,8 @@ import re
 
 class NodeEditorWidget(QMainWindow):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.view = NodeEditorView()
         self.scene = GScene()
         self.nodesDict: Dict[str, GNode] = {}
@@ -118,6 +118,8 @@ class NodeEditorWidget(QMainWindow):
         """
         # 1、清空页面
         self.scene.clear()
+        self.nodesDict.clear()
+        self.edgesDict.clear()
         # 2、加载数据
         decorateTaskList = dmsProject().getTableList(DB_Decorate_Type, filter_str=currentBuildingID)
         # 3、绘制节点

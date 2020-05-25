@@ -4,15 +4,18 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QHBoxLayout, QVBoxLayout
 
 from bll.dmsProject import *
+from nodeeditor.NodeEditerWidget.NodeEditorWidget import NodeEditorWidget
 from ui.dmsBuildingWgt import DMSBuildingWgt
 from ui.dmsUnitWgt import DMSUnitWgt
 from ui.ui_mainWin import Ui_MainWindow
 
 
 class DMSMainWin(QMainWindow):
+    WIDGET_SPACING = 4
     horizonlayout = None
     buildingWgt = None
     unitTabWgt = None
+    nodeViewWgt = None
 
     def __init__(self, parent=None):
         super(DMSMainWin, self).__init__(parent)
@@ -44,11 +47,24 @@ class DMSMainWin(QMainWindow):
         return True
 
     def initUi(self):
-        self.horizonlayout = QVBoxLayout(self)
+        self.horizonlayout = QHBoxLayout(self)
+        self.horizonlayout.setContentsMargins(0, 0, 0, 0)
+        self.horizonlayout.setSpacing(4)
+
         self.buildingWgt = DMSBuildingWgt(self)
-        # self.unitTabWgt = DMSUnitWgt(self)
+        self.buildingWgt.setFixedWidth(240)
+        self.unitTabWgt = DMSUnitWgt(self)
+        self.unitTabWgt.setMinimumWidth(400)
+        self.nodeViewWgt = NodeEditorWidget(self)
+        self.nodeViewWgt.setMinimumWidth(400)
+
         self.horizonlayout.addWidget(self.buildingWgt)
-        # self.horizonlayout.addWidget(self.unitTabWgt)
+        self.horizonlayout.addWidget(self.unitTabWgt)
+        self.horizonlayout.addWidget(self.nodeViewWgt)
+
+        self.horizonlayout.setStretch(0, 1)
+        self.horizonlayout.setStretch(1, 1)
+        self.horizonlayout.setStretch(2, 1)
         self.centralWidget().setLayout(self.horizonlayout)
 
         self.updateUiEnabled()

@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'E:\projects\dms\ui\ui_mainWin.ui'
+# Form implementation generated from reading ui file 'ui_mainWin.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QVBoxLayout
 
 
 class Ui_MainWindow(object):
@@ -16,9 +15,6 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
-        layout = QVBoxLayout()
-        self.centralwidget.setLayout(layout)
-        layout.setContentsMargins(0, 0, 0, 0)
         self.centralwidget.setObjectName("centralwidget")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -31,9 +27,6 @@ class Ui_MainWindow(object):
         self.actNewProject.setObjectName("actNewProject")
         self.actOpenProject = QtWidgets.QAction(MainWindow)
         self.actOpenProject.setObjectName("actOpenProject")
-        self.actEditDecorateType = QtWidgets.QAction(MainWindow)
-        self.actEditDecorateType.setObjectName("actEditDecorateType")
-        # 添加按钮
         self.menuFile.addAction(self.actNewProject)
         self.menuFile.addAction(self.actOpenProject)
         self.menubar.addAction(self.menuFile.menuAction())
