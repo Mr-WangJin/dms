@@ -38,6 +38,7 @@ class DMSBuildingWgt(QWidget):
 
     # 获取当前单体
     def getCurrentBuilding(self):
+        item: QTreeWidgetItem = self.ui.treeWidget.currentItem()
         pass
 
     def addNewBuilding(self):
