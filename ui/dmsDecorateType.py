@@ -50,8 +50,10 @@ class DMSDecorateTypeWgt(QDialog):
         pass
 
     def initSignal(self):
-        self.actInsertTask.triggered.connect(self.addDecorateType)
-        self.actDelTask.triggered.connect(self.delDecorateType)
+        self.actInsertTask.triggered.connect(self.addDecorateType)  # 插入任务
+        self.actDelTask.triggered.connect(self.delDecorateType)  # 删除任务
+        self.commitBtn.clicked.connect(self.submit)  # 提交
+        self.cancelBtn.clicked.connect(self.cancel)  # 取消
 
     def initUI(self):
         # 布局
@@ -136,6 +138,14 @@ class DMSDecorateTypeWgt(QDialog):
     def checkDateVisable(self):
         # 数据校验
         pass
+
+    def submit(self):
+        self.saveDecorateTypeDate2DB()
+        self.close()
+
+    def cancel(self):
+        # todo 清空session
+        self.close()
 
 
 if __name__ == '__main__':
