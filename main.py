@@ -44,7 +44,7 @@ if __name__ == '__main__':
     app = DMSApplication(sys.argv)
 
     main_form = DMSMainWin()
-    main_form.show()
+    main_form.showMaximized()
     # 系统exit()方法确保应用程序干净的退出
     # 的exec_()方法有下划线。因为执行是一个Python关键词。因此，exec_()代替
     sys.exit(app.exec_())

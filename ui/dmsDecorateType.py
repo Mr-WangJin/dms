@@ -5,12 +5,14 @@ import uuid
 from typing import List
 
 from PyQt5.QtCore import QModelIndex, Qt
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5.QtWidgets import QDialog, QHBoxLayout, QTableWidget, QApplication, QAbstractItemView, QAction, QToolBar, QVBoxLayout, QPushButton, \
-    QSizePolicy, QSpacerItem, QTableWidgetItem
+    QSizePolicy, QSpacerItem, QTableWidgetItem, QColorDialog
 from qtconsole.qt import QtGui
 
-from bll.dmsContext import dmsDatabase
+from bll import dmsContext
+from bll.dmsContext import dmsDatabase, glb_dmsContext
+from config import Config
 from dal.dmsTables import DB_Decorate_Type
 from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GNode import GNode
 
@@ -65,8 +67,7 @@ class DMSDecorateTypeWgt(QDialog):
         self.setLayout(layout)
         layout.addWidget(self.toolBar)
         layout.addWidget(self.tableWdg)
-        # bottomBar
-
+        # bottomBar and button
         bottomBar = QHBoxLayout()
         bottomBar.setSpacing(20)
         bottomBar.setContentsMargins(10, 10, 16, 16)
@@ -74,27 +75,33 @@ class DMSDecorateTypeWgt(QDialog):
         bottomBar.addItem(spacerItem)
         bottomBar.addWidget(self.commitBtn)
         bottomBar.addWidget(self.cancelBtn)
-        self.commitBtn.setFixedSize(80, 40)
-        self.cancelBtn.setFixedSize(80, 40)
+        self.commitBtn.setFixedSize(80, glb_dmsContext.BUTTON_NORMAL_HEIGHT)
+        self.cancelBtn.setFixedSize(80, glb_dmsContext.BUTTON_NORMAL_HEIGHT)
         layout.addLayout(bottomBar)
         self.resize(800, 600)
         # toolBar
         self.toolBar.setFixedHeight(DMSDecorateTypeWgt.TOOL_BAR_HEIGHT)
         # table
         '''隐藏不必要的列'''
-        if self.DEBUG is False:
+        if Config.DEBUG is False:
             self.tableWdg.hideColumn(DMSDecorateTypeWgt.TASK_ID)
             self.tableWdg.hideColumn(DMSDecorateTypeWgt.TASK_NODE_X)
             self.tableWdg.hideColumn(DMSDecorateTypeWgt.TASK_NODE_Y)
             self.tableWdg.hideColumn(DMSDecorateTypeWgt.TASK_NODE_COLOR)
+        self.tableWdg.horizontalHeader().setStretchLastSection(True)
         '''设置表头表列'''
         self.tableWdg.horizontalHeader().setFixedHeight(DMSDecorateTypeWgt.TABLE_HEADER_HEIGHT)
         self.tableWdg.setHorizontalHeaderLabels(DMSDecorateTypeWgt.HEADER_NAME)
-        self.tableWdg.verticalHeader().setVisible(False)
+        # self.tableWdg.verticalHeader().setVisible(False)
+        self.tableWdg.verticalHeader().setFixedWidth(30)
         '''设置选择和编辑行为'''
         self.tableWdg.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.AnyKeyPressed)
+        self.tableWdg.setSelectionMode(QAbstractItemView.ExtendedSelection)
         # Todo
         # self.tableWdg.setSelectionBehavior(QAbstractItemView.sel)
+
+        self.setFixedWidth(1200)
+        # self.setWindowFlags(Qt.FramelessWindowHint)
 
     def updateDecorateType(self, currentBuilding):
         self.tableWdg.clear()
@@ -117,20 +124,20 @@ class DMSDecorateTypeWgt(QDialog):
 
     def addDecorateType(self):
         itemList = self.tableWdg.selectedItems()
-        rowNum = self.tableWdg.rowCount() if len(itemList) == 0 else itemList[0].row()
-        self.tableWdg.insertRow(rowNum)
-        self.tableWdg.setItem(rowNum, self.TASK_ID, QTableWidgetItem(str(uuid.uuid1())))
-        self.tableWdg.setItem(rowNum, self.TASK_NODE_X, QTableWidgetItem("0"))
-        self.tableWdg.setItem(rowNum, self.TASK_NODE_Y, QTableWidgetItem("0"))
-        self.tableWdg.setItem(rowNum, self.TASK_NODE_COLOR, QTableWidgetItem(str(GNode.brush.color().rgba())))
+        [itemRow, itemCol] = [self.tableWdg.rowCount(), self.TASK_ORDER] if len(itemList) == 0 else [itemList[0].row(), itemList[0].column()]
+        # print("before insert: current", self.tableWdg.currentItem().row(), self.tableWdg.currentItem().column())
+        self.tableWdg.insertRow(itemRow)
+
+        self.initNewRow(itemRow)
 
     def delDecorateType(self):
         itemList = self.tableWdg.selectedItems()
         if len(itemList) == 0:
             return
         else:
-            taskID = self.tableWdg.itemAt(itemList[0].row(), DMSDecorateTypeWgt.TASK_ID).data(Qt.UserRole)
-            self.tableWdg.removeRow(itemList[0].row())
+            item = itemList[0]
+            taskID = self.tableWdg.item(item.row(), DMSDecorateTypeWgt.TASK_ID).data(Qt.UserRole)
+            self.tableWdg.removeRow(item.row())
 
     def saveDecorateTypeDate2DB(self):
         pass
@@ -138,6 +145,24 @@ class DMSDecorateTypeWgt(QDialog):
     def checkDateVisable(self):
         # 数据校验
         pass
+
+    def initNewRow(self, rowNum):
+        self.tableWdg.setItem(rowNum, self.TASK_ID, QTableWidgetItem(str(uuid.uuid1())))
+        self.tableWdg.setItem(rowNum, self.TASK_NODE_X, QTableWidgetItem("0"))
+        self.tableWdg.setItem(rowNum, self.TASK_NODE_Y, QTableWidgetItem("0"))
+        self.tableWdg.setItem(rowNum, self.TASK_NODE_COLOR, QTableWidgetItem(GNode.brush.color().name()))
+        print(rowNum, self.TASK_NODE_COLOR)
+        # 设置色彩控件
+        self.tableWdg.item(rowNum, self.TASK_NODE_COLOR).setBackground(QBrush(QColor(GNode.brush.color().name())))
+        self.tableWdg.item(rowNum, self.TASK_NODE_COLOR).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)  # 单元格不可被编辑
+
+        # self.tableWdg.item(rowNum, self.TASK_NODE_COLOR).
+        # col = QColorDialog.getColor()
+        # col.name()
+
+    def currAndSelect(self):
+        print("after insert: current", self.tableWdg.currentItem().row(), self.tableWdg.currentItem().column())
+        print("after insert: selected", self.tableWdg.selectedItems()[0].row(), self.tableWdg.selectedItems()[0].column())
 
     def submit(self):
         self.saveDecorateTypeDate2DB()

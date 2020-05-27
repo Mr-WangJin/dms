@@ -1,11 +1,12 @@
 # encoding: utf-8
 
 
-from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QHBoxLayout, QVBoxLayout, QAction
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QHBoxLayout, QVBoxLayout, QAction, QToolBar
 
 from bll.dmsProject import *
 from nodeeditor.NodeEditerWidget.NodeEditorWidget import NodeEditorWidget
 from ui.dmsBuildingWgt import DMSBuildingWgt
+from ui.dmsDecorateType import DMSDecorateTypeWgt
 from ui.dmsUnitWgt import DMSUnitWgt
 from ui.ui_mainWin import Ui_MainWindow
 
@@ -19,6 +20,8 @@ class DMSMainWin(QMainWindow):
     buildingWgt = None
     unitTabWgt = None
     nodeViewWgt = None
+    ribbonBanner = None
+    decorateTypeWgt = None
 
     def __init__(self, parent=None):
         super(DMSMainWin, self).__init__(parent)
@@ -28,17 +31,24 @@ class DMSMainWin(QMainWindow):
         self.setWindowTitle('装修管理')
         self.ui.actNewProject.triggered.connect(self.newProject)
         self.ui.actOpenProject.triggered.connect(self.openProject)
-
+        self.toolBar = self.addToolBar("工具栏")
+        # self.actNewProject = QAction("新建工程")
         self.initUi()
+        self.initTrigger()
+
+    def initTrigger(self):
+        '''切换单体'''
+        # self.buildingWgt.ui.treeWidget.currentChanged.connect(self.unitTabWgt.updateUnitDate)
+        pass
 
     def newProject(self):
         new_file = QFileDialog().getSaveFileName(None, '新建工程', '', '*.dms')
         if new_file[0] == "":
             return False
-
-        newDMSProject(new_file[0])
-        self.updateUiEnabled()
-        return True
+        else:
+            newDMSProject(new_file[0])
+            self.updateUiEnabled()
+            return True
 
     def openProject(self):
         open_file = QFileDialog().getOpenFileName(None, '打开工程', '', '*.dms')
@@ -50,10 +60,13 @@ class DMSMainWin(QMainWindow):
         return True
 
     def initUi(self):
+        self.toolBar.addAction(self.ui.actNewProject)
+        self.toolBar.addAction(self.ui.actOpenProject)
+        self.toolBar.setMovable(False)
         self.horizonlayout = QHBoxLayout(self)
         self.horizonlayout.setContentsMargins(0, 0, 0, 0)
         self.horizonlayout.setSpacing(DMSMainWin.WIDGET_SPACING)
-
+        '''设置窗口比例'''
         self.buildingWgt = DMSBuildingWgt(self)
         self.buildingWgt.setFixedWidth(DMSMainWin.BUILDINGWGT_WIDTH)
         self.unitTabWgt = DMSUnitWgt(self)
@@ -69,8 +82,25 @@ class DMSMainWin(QMainWindow):
         self.horizonlayout.setStretch(1, 1)
         self.horizonlayout.setStretch(2, 1)
         self.centralWidget().setLayout(self.horizonlayout)
+        self.resize(1200, 700)
 
         self.updateUiEnabled()
+        '''设置全局样式'''
+        # self.ui.centralwidget.layout().addWidget(self.ribbonBanner)
+        self.toolBar.setFixedHeight(glb_dmsContext.TOOLBAR_HEIGHT)
+        self.setStyleSheet("QTreeWidget::item{height:30px}")
 
     def updateUiEnabled(self):
         self.buildingWgt.updateUiEnabled()
+        self.unitTabWgt.updateUiEnabled()
+
+    def buildingChanged(self, current, previous):
+        self.unitTabWgt.updateUnitDate(current, previous)
+
+    # 接受各组件信号
+    def editTask(self):
+        self.decorateTypeWgt = DMSDecorateTypeWgt()
+        self.decorateTypeWgt.showNormal()
+
+    def updateUnitTabWgd(self, current, previous):
+        self.unitTabWgt.updateUnitDate(current, previous)

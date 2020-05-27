@@ -1,7 +1,7 @@
 # encoding: utf-8
 # module ui
 from PyQt5.QtCore import Qt, QModelIndex
-from PyQt5.QtWidgets import QWidget, QTreeWidgetItem
+from PyQt5.QtWidgets import QWidget, QTreeWidgetItem, QAbstractItemView, QAction
 from sqlalchemy import MetaData
 
 from bll.dmsContext import *
@@ -16,13 +16,26 @@ class DMSBuildingWgt(QWidget):
     def __init__(self, parent=None):
         super(DMSBuildingWgt, self).__init__(parent)
         self.ui = Ui_wgtBuilding()
-        self.ui.setupUi(self)
+        self.actMoveUp = QAction("上移")
+        self.initUI()
+        self.initTrigger()
 
+    def initUI(self):
+        self.ui.setupUi(self)
+        self.setStyleSheet()
+        self.ui.treeWidget.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.AnyKeyPressed)
+
+    def initTrigger(self):
         self.ui.toolBtnAdd.clicked.connect(self.addNewBuilding)
         self.ui.toolBtnDelete.clicked.connect(self.deleteBuilding)
+        self.ui.treeWidget.currentItemChanged.connect(self.parent().buildingChanged)
 
     # 刷新单体树
     def updateBuilding(self):
+        """
+        刷新单体
+        :return:
+        """
         self.ui.treeWidget.clear()
         building_list = dmsDatabase().getTableList(DB_Building)
 
@@ -33,8 +46,12 @@ class DMSBuildingWgt(QWidget):
             item = QTreeWidgetItem()
             item.setText(0, building.name)
             item.setData(0, Qt.UserRole, building)
+            item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsEditable | Qt.ItemIsSelectable)
             # rootItem.addChild(item)
             self.ui.treeWidget.addTopLevelItem(item)
+        firstItem = self.ui.treeWidget.topLevelItem(0)
+        if firstItem is not None:
+            firstItem.setSelected(True)
 
     # 获取当前单体
     def getCurrentBuilding(self):
@@ -45,7 +62,6 @@ class DMSBuildingWgt(QWidget):
         building = DB_Building()
         building.name = "测试新建单体"
         building.order = 0
-
         dmsDatabase().addRecord(building)
 
         self.updateBuilding()
@@ -67,8 +83,11 @@ class DMSBuildingWgt(QWidget):
         # self.updateBuilding()
 
     def updateUiEnabled(self):
+        """
+        解除页面按钮禁用状态，当未创建工程时。
+        :return:
+        """
         enabled = isProjectNull()
         enabled = not enabled
         self.ui.toolBtnAdd.setEnabled(enabled)
         self.ui.toolBtnDelete.setEnabled(enabled)
-

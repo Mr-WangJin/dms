@@ -42,7 +42,6 @@ class Ui_wgtBuilding(object):
         self.treeWidget.headerItem().setText(0, "1")
         self.treeWidget.header().setVisible(False)
         self.verticalLayout.addWidget(self.treeWidget)
-
         self.retranslateUi(wgtBuilding)
         QtCore.QMetaObject.connectSlotsByName(wgtBuilding)
 

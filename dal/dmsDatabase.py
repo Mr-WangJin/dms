@@ -51,9 +51,14 @@ class DMSDatabase(object):
     def dbVersion(self):
         pass
 
-    # 获取表记录
-    # @filter_str ： 过滤条件
+
     def getTableList(self, table, filter_str=None):
+        """
+
+        :param table: 获取表记录
+        :param filter_str: 过滤条件
+        :return:
+        """
         if filter_str is None:
             table_list = self.session.query(table).all()
             return table_list
@@ -70,8 +75,8 @@ class DMSDatabase(object):
 
     # 更新记录
     def updateRecord(self, tableName, record):
-        filterName, filterValue, columnName, value = record
-        self.session.query(tableName).filter_by(filterName=filterValue).update({columnName: value})
+        filterName, filterValue, recordKey, recordValue = record
+        self.session.query(tableName).filter_by(filterName=1).update({recordKey: recordValue})
         self.session.commit()
 
     # 删除记录

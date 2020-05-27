@@ -1,10 +1,12 @@
 # 上下文类
-
 from dal.dmsDatabase import *
+
 
 class DMSContext(object):
     project = None
-
+    BUTTON_NORMAL_HEIGHT = 40
+    TOOLBAR_HEIGHT = 32
+    TEXT_TABLE_HEADER_SIZE = 14
     """docstring for DMSContext"""
 
     def __init__(self):
