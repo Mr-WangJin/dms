@@ -22,8 +22,9 @@ class DMSBuildingWgt(QWidget):
 
     def initUI(self):
         self.ui.setupUi(self)
-        self.setStyleSheet()
         self.ui.treeWidget.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.AnyKeyPressed)
+        self.setStyleSheet("QWidget::Item{}")
+        self.setFixedWidth(320)
 
     def initTrigger(self):
         self.ui.toolBtnAdd.clicked.connect(self.addNewBuilding)

@@ -83,7 +83,7 @@ class DMSDecorateTypeWgt(QDialog):
         self.toolBar.setFixedHeight(DMSDecorateTypeWgt.TOOL_BAR_HEIGHT)
         # table
         '''隐藏不必要的列'''
-        if Config.DEBUG is False:
+        if not glb_dmsContext.IS_DEBUG:
             self.tableWdg.hideColumn(DMSDecorateTypeWgt.TASK_ID)
             self.tableWdg.hideColumn(DMSDecorateTypeWgt.TASK_NODE_X)
             self.tableWdg.hideColumn(DMSDecorateTypeWgt.TASK_NODE_Y)
@@ -102,6 +102,8 @@ class DMSDecorateTypeWgt(QDialog):
 
         self.setFixedWidth(1200)
         # self.setWindowFlags(Qt.FramelessWindowHint)
+        self.tableWdg.setShowGrid(False)
+        # self.tableWdg.setStyleSheet("QTableWidget::Item{border:0px solid rgb(255,0,0);border-bottom:1px solid rgb(255,0,0);}")
 
     def updateDecorateType(self, currentBuilding):
         self.tableWdg.clear()
@@ -151,7 +153,6 @@ class DMSDecorateTypeWgt(QDialog):
         self.tableWdg.setItem(rowNum, self.TASK_NODE_X, QTableWidgetItem("0"))
         self.tableWdg.setItem(rowNum, self.TASK_NODE_Y, QTableWidgetItem("0"))
         self.tableWdg.setItem(rowNum, self.TASK_NODE_COLOR, QTableWidgetItem(GNode.brush.color().name()))
-        print(rowNum, self.TASK_NODE_COLOR)
         # 设置色彩控件
         self.tableWdg.item(rowNum, self.TASK_NODE_COLOR).setBackground(QBrush(QColor(GNode.brush.color().name())))
         self.tableWdg.item(rowNum, self.TASK_NODE_COLOR).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)  # 单元格不可被编辑

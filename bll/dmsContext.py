@@ -7,6 +7,7 @@ class DMSContext(object):
     BUTTON_NORMAL_HEIGHT = 40
     TOOLBAR_HEIGHT = 32
     TEXT_TABLE_HEADER_SIZE = 14
+    IS_DEBUG = True
     """docstring for DMSContext"""
 
     def __init__(self):
