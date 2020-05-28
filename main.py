@@ -1,8 +1,9 @@
 # encoding: utf-8
-
+import platform
 import sys
 
 from PyQt5 import QtWidgets
+from PyQt5.QtCore import QSysInfo
 from PyQt5.QtWidgets import QApplication
 from ui.dmsMainWin import DMSMainWin
 import traceback
@@ -40,8 +41,14 @@ def excepthook(exc_type, exc_value, exc_tb):
 if __name__ == '__main__':
     # 设置捕获异常
     sys.excepthook = excepthook
-
+    '''获取系统信息'''
     app = DMSApplication(sys.argv)
+    '''加载样式文件'''
+    styleFile = 'win.css' if sys.platform.startswith('win') else "mac.css"
+    with open('./style/' + styleFile) as file:
+        styleSheet = file.readlines()
+        styleSheet = ''.join(styleSheet).strip('\n')
+        app.setStyleSheet(styleSheet)
 
     main_form = DMSMainWin()
     main_form.showMaximized()

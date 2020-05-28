@@ -9,7 +9,6 @@ from ui.dmsDecorateType import DMSDecorateTypeWgt
 from ui.dmsUnitWgt import DMSUnitWgt
 from ui.ui_mainWin import Ui_MainWindow
 
-
 class DMSMainWin(QMainWindow):
     WIDGET_SPACING = 4
     BUILDINGWGT_WIDTH = 320

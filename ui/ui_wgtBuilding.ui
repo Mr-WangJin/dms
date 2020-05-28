@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>256</width>
+    <width>260</width>
     <height>468</height>
    </rect>
   </property>
@@ -124,6 +124,9 @@ border:0px;</string>
      <layout class="QHBoxLayout" name="topBannerLayout">
       <property name="spacing">
        <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>16</number>
       </property>
       <property name="topMargin">
        <number>0</number>
@@ -247,11 +250,23 @@ border:0px;</string>
        <pointsize>14</pointsize>
       </font>
      </property>
+     <property name="acceptDrops">
+      <bool>true</bool>
+     </property>
      <property name="styleSheet">
       <string notr="true">border:0px;</string>
      </property>
+     <property name="lineWidth">
+      <number>0</number>
+     </property>
      <property name="autoScroll">
       <bool>true</bool>
+     </property>
+     <property name="autoScrollMargin">
+      <number>16</number>
+     </property>
+     <property name="indentation">
+      <number>12</number>
      </property>
      <property name="uniformRowHeights">
       <bool>true</bool>
