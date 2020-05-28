@@ -9,5 +9,9 @@ QMainWindow {
 
 QFont {
     font-family: "PingFang SC";
-    font-size: 20px;
+    font-size: 20pt;
+}
+
+.QTabBar {
+    border: 0px;
 }

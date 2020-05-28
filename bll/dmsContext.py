@@ -4,7 +4,7 @@ from dal.dmsDatabase import *
 
 class DMSContext(object):
     project = None
-    BUTTON_NORMAL_HEIGHT = 40
+    BUTTON_NORMAL_HEIGHT = 32
     TOOLBAR_HEIGHT = 32
     TEXT_TABLE_HEADER_SIZE = 14
     IS_DEBUG = True

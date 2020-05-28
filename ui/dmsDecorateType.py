@@ -69,8 +69,8 @@ class DMSDecorateTypeWgt(QDialog):
         layout.addWidget(self.tableWdg)
         # bottomBar and button
         bottomBar = QHBoxLayout()
-        bottomBar.setSpacing(20)
-        bottomBar.setContentsMargins(10, 10, 16, 16)
+        bottomBar.setSpacing(4)
+        bottomBar.setContentsMargins(10, 10, 24, 16)
         spacerItem = QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         bottomBar.addItem(spacerItem)
         bottomBar.addWidget(self.commitBtn)
