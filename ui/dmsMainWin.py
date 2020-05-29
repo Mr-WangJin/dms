@@ -1,6 +1,6 @@
 # encoding: utf-8
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QHBoxLayout, QVBoxLayout, QAction, QToolBar
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QHBoxLayout, QVBoxLayout, QAction, QToolBar, QTreeWidgetItem
 
 from bll.dmsProject import *
 from nodeeditor.NodeEditerWidget.NodeEditorWidget import NodeEditorWidget
@@ -96,7 +96,8 @@ class DMSMainWin(QMainWindow):
         self.unitTabWgt.setVisible(not isProjectNull())
         self.nodeViewWgt.setVisible(not isProjectNull())
 
-    def buildingChanged(self, current, previous):
+    def buildingChanged(self, current:QTreeWidgetItem, previous):
+        print(current.text(0))
         self.unitTabWgt.updateUnitDate(current, previous)
 
     # 接受各组件信号

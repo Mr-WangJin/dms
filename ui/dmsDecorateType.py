@@ -58,16 +58,18 @@ class DMSDecorateTypeWgt(QDialog):
         self.cancelBtn.clicked.connect(self.cancel)  # 取消
 
     def initUI(self):
-        # 布局
+        '''布局'''
         self.setWindowTitle("编辑计划模板")
         self.setWindowModality(Qt.WindowModal)
-        layout = QVBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
-        self.setLayout(layout)
+        layout = QVBoxLayout(self)
         layout.addWidget(self.toolBar)
         layout.addWidget(self.tableWdg)
-        # bottomBar and button
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        self.resize(1200, 600)
+        self.setFixedWidth(1200)
+
+        '''底部按钮'''
         bottomBar = QHBoxLayout()
         bottomBar.setSpacing(4)
         bottomBar.setContentsMargins(10, 10, 24, 16)
@@ -78,48 +80,49 @@ class DMSDecorateTypeWgt(QDialog):
         self.commitBtn.setFixedSize(80, glb_dmsContext.BUTTON_NORMAL_HEIGHT)
         self.cancelBtn.setFixedSize(80, glb_dmsContext.BUTTON_NORMAL_HEIGHT)
         layout.addLayout(bottomBar)
-        self.resize(800, 600)
-        # toolBar
+        '''工具栏'''
         self.toolBar.setFixedHeight(DMSDecorateTypeWgt.TOOL_BAR_HEIGHT)
-        # table
-        '''隐藏不必要的列'''
+
+        '''中部表格'''
+        # 隐藏不必要的列
         if not glb_dmsContext.IS_DEBUG:
             self.tableWdg.hideColumn(DMSDecorateTypeWgt.TASK_ID)
             self.tableWdg.hideColumn(DMSDecorateTypeWgt.TASK_NODE_X)
             self.tableWdg.hideColumn(DMSDecorateTypeWgt.TASK_NODE_Y)
             self.tableWdg.hideColumn(DMSDecorateTypeWgt.TASK_NODE_COLOR)
+        # 尾列可伸缩
         self.tableWdg.horizontalHeader().setStretchLastSection(True)
-        '''设置表头表列'''
+        # 设置表头
         self.tableWdg.horizontalHeader().setFixedHeight(DMSDecorateTypeWgt.TABLE_HEADER_HEIGHT)
+        # 列名
         self.tableWdg.setHorizontalHeaderLabels(DMSDecorateTypeWgt.HEADER_NAME)
-        # self.tableWdg.verticalHeader().setVisible(False)
+        self.tableWdg.verticalHeader().setVisible(False)
         self.tableWdg.verticalHeader().setFixedWidth(30)
-        '''设置选择和编辑行为'''
+        '''设置表选择和编辑行为'''
         self.tableWdg.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.AnyKeyPressed)
         self.tableWdg.setSelectionMode(QAbstractItemView.ExtendedSelection)
         # Todo
         # self.tableWdg.setSelectionBehavior(QAbstractItemView.sel)
 
-        self.setFixedWidth(1200)
         # self.setWindowFlags(Qt.FramelessWindowHint)
         self.tableWdg.setShowGrid(False)
         # self.tableWdg.setStyleSheet("QTableWidget::Item{border:0px solid rgb(255,0,0);border-bottom:1px solid rgb(255,0,0);}")
 
-    def updateDecorateType(self, currentBuilding):
+    def updateDecorateType(self, currentBuildingAndCurrentUnitID):
         self.tableWdg.clear()
         task: DB_Decorate_Type
-        decorateTaskList: List[DB_Decorate_Type] = dmsDatabase().getTableList(table=DB_Decorate_Type, filter_str=currentBuilding)
+        decorateTaskList: List[DB_Decorate_Type] = dmsDatabase().getTableList(table=DB_Decorate_Type, filter_str=currentBuildingAndCurrentUnitID)
         rowNumber = 0
         for task in decorateTaskList:
-            taskID = QTableWidgetItem(task.id)
-            taskOrder = QTableWidgetItem(task.order)
-            taskName = QTableWidgetItem(task.name)
-            taskPre = QTableWidgetItem(task.pre_task)
-            taskDuration = QTableWidgetItem(task.duration)
-
-            self.tableWdg.setItem(rowNumber, 1, taskName)
-
-            itemOrder = QTableWidgetItem(task.order)
+            self.tableWdg.setItem(rowNumber, DMSDecorateTypeWgt.TASK_ID, QTableWidgetItem(task.id))
+            self.tableWdg.setItem(rowNumber, DMSDecorateTypeWgt.TASK_ORDER, QTableWidgetItem(task.order))
+            self.tableWdg.setItem(rowNumber, DMSDecorateTypeWgt.TASK_NAME, QTableWidgetItem(task.name))
+            self.tableWdg.setItem(rowNumber, DMSDecorateTypeWgt.TASK_PRE, QTableWidgetItem(task.pre_task))
+            self.tableWdg.setItem(rowNumber, DMSDecorateTypeWgt.TASK_DURATION, QTableWidgetItem(task.duration))
+            self.tableWdg.setItem(rowNumber, DMSDecorateTypeWgt.TASK_NODE_COLOR, QTableWidgetItem(task.node_color))
+            self.tableWdg.setItem(rowNumber, DMSDecorateTypeWgt.TASK_NODE_X, QTableWidgetItem(task.node_x))
+            self.tableWdg.setItem(rowNumber, DMSDecorateTypeWgt.TASK_NODE_Y, QTableWidgetItem(task.node_y))
+            rowNumber = rowNumber + 1
 
     def getCurrentItem(self):
         return self.tableWdg.currentItem()

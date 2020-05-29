@@ -108,7 +108,6 @@ class DMSUnitWgt(QWidget):
         """
 
         # Todo 待梳理嵌套关系
-        print(currentBuildingID, previousBuildingID)
         dateTableWidget = self.unitTabWdg.currentWidget()
         dateTableWidget = DMSDecorateDataWgt()
         # decorateTaskList: List[DB_Decorate_Type] = dmsProject().getTableList(DB_Decorate_Type, filter_str=currentBuildingID).orderBy(
