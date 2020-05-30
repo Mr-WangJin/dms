@@ -1,5 +1,5 @@
 # 上下文类
-#from bll.dmsProject import DMSProject
+# from bll.dmsProject import DMSProject
 from dal.dmsDatabase import *
 
 
@@ -39,3 +39,7 @@ def isProjectNull():
     if glb_dmsContext.getProject() is None:
         return True
     return False
+
+
+def isDebug() -> bool:
+    return True

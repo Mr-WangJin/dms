@@ -69,17 +69,17 @@ class DB_Struct_Name(Base):
 class DB_Decorate_Type(Base):
     __tablename__ = "decorate_type"
 
-    id = Column(Integer, primary_key=True)
-    order = Column(Integer, unique=True)
-    name = Column(String(32))
-    pre_task = Column(String(32))  # 前置任务
-    duration = Column(Integer)  # 工期
-    room_belong = Column(String(32))  # 房间归属
-    responsible = Column(String(32))  # 责任人
+    id = Column(Integer, primary_key=True, comment='主键')
+    order = Column(Integer, unique=True, comment='序号')
+    name = Column(String(32), comment='任务名称')
+    pre_task = Column(String(32), comment='前置任务')
+    duration = Column(Integer, comment='工期')
+    room_belong = Column(String(32), comment='房间')
+    responsible = Column(String(32), comment='责任人')
     # node 节点相关参数
-    node_color = Column(String(8))  # node 节点颜色
-    node_x = Column(Float)  # node 节点位置坐标_x
-    node_y = Column(Float)  # node 节点位置坐标_y
+    node_color = Column(String(8), comment='颜色')  # node 节点颜色
+    node_x = Column(Float, comment='X')  # node 节点位置坐标_x
+    node_y = Column(Float, comment='Y')  # node 节点位置坐标_y
 
     building_id = Column(Integer, ForeignKey("building.id"))
     building = relationship("DB_Building", backref="decorate_type_of_building")
@@ -105,3 +105,8 @@ class DB_Version(object):
 
     version = Column(Integer)  # 数据库版本
     data_version = Column(Integer)  # 数据版本
+
+
+
+
+

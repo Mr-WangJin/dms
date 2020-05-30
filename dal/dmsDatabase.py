@@ -17,6 +17,7 @@ class DMSDatabase(object):
     session: Session = None
     __engine__: Engine = None
     fileName: String = ""
+    metadata: MetaData = None
 
     # BASE_PATH = "sqlite:///sochi_athletes.sqlite3"
 
@@ -26,6 +27,12 @@ class DMSDatabase(object):
     def getSession(self):
         return self.session
 
+    def getTableMetadata(self, table_str):
+        # 反射表
+        meta_table = Table(table_str, self.metadata, autoload=True, autoload_with=self.__engine__)
+        return meta_table
+        pass
+
     # 打开数据库
     def openDatabase(self, filename):
         self.fileName = filename
@@ -34,6 +41,7 @@ class DMSDatabase(object):
         # Base.metadata.create_all(self.__engine__)
         db_session = sessionmaker(bind=self.__engine__)
         self.session = db_session()
+        self.metadata = MetaData(bind=self.__engine__)
 
     # 新建数据库
     def newDatabase(self, filename):
@@ -43,6 +51,7 @@ class DMSDatabase(object):
         Base.metadata.create_all(self.__engine__)
         db_session = sessionmaker(bind=self.__engine__)
         self.session = db_session()
+        self.metadata = MetaData(bind=self.__engine__)
 
     def closeDatabase(self):
         pass
