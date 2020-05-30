@@ -8,7 +8,7 @@ from PyQt5.QtCore import QModelIndex, Qt
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5.QtWidgets import QDialog, QHBoxLayout, QTableWidget, QApplication, QAbstractItemView, QAction, QToolBar, QVBoxLayout, QPushButton, \
     QSizePolicy, QSpacerItem, QTableWidgetItem, QColorDialog
-from qtconsole.qt import QtGui
+#from qtconsole.qt import QtGui
 
 from bll import dmsContext
 from bll.dmsContext import dmsDatabase, glb_dmsContext

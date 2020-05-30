@@ -15,6 +15,8 @@ class DB_Building(Base):
     name = Column(String(32))
     order = Column(Integer)
 
+    __mapper_args__ = {"order_by": order}
+
     def __repr__(self):
         return "<User(id= '%s', name='%s')>" % (self.id, self.name)
 
@@ -31,11 +33,15 @@ class DB_Building(Base):
 ### 单元
 class DB_Building_Unit(Base):
     __tablename__ = "building_unit"
+
     id = Column(Integer, primary_key=True)
     name = Column(String(32))
+    order = Column(Integer)
 
     building_id = Column(Integer, ForeignKey("building.id"))
     building = relationship('DB_Building', backref='building_unit_of_building')
+
+    __mapper_args__ = {"order_by": order}
 
 
 ### 楼层

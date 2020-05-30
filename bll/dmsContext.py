@@ -1,4 +1,5 @@
 # 上下文类
+#from bll.dmsProject import DMSProject
 from dal.dmsDatabase import *
 
 
@@ -29,7 +30,7 @@ def dmsProject():
     return glb_dmsContext.getProject()
 
 
-def dmsDatabase():
+def dmsDatabase() -> DMSDatabase:
     return glb_dmsContext.getProject().dmsDatabase
 
 

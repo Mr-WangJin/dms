@@ -64,19 +64,20 @@ class DMSMainWin(QMainWindow):
         self.horizonlayout.setContentsMargins(0, 0, 0, 0)
         self.horizonlayout.setSpacing(DMSMainWin.WIDGET_SPACING)
         self.buildingWgt = DMSBuildingWgt(self)
+        self.buildingWgt.sigBuildingChanged.connect(self.buildingChanged)
         self.buildingWgt.setFixedWidth(DMSMainWin.BUILDINGWGT_WIDTH)
-        self.unitTabWgt = DMSUnitWgt(self)
-        self.unitTabWgt.setMinimumWidth(DMSMainWin.UNITTABWGT_WIDTH)
+        self.unitWgt = DMSUnitWgt(self)
+        self.unitWgt.setMinimumWidth(DMSMainWin.UNITTABWGT_WIDTH)
         self.nodeViewWgt = NodeEditorWidget(self)
         self.nodeViewWgt.setMinimumWidth(DMSMainWin.NODEWGT_WIDTH)
         self.horizonlayout.addWidget(self.buildingWgt)
-        self.horizonlayout.addWidget(self.unitTabWgt)
+        self.horizonlayout.addWidget(self.unitWgt)
         self.horizonlayout.addWidget(self.nodeViewWgt)
         self.horizonlayout.setStretch(0, 0)
         self.horizonlayout.setStretch(1, 1)
         self.horizonlayout.setStretch(2, 1)
         self.centralWidget().setLayout(self.horizonlayout)
-        self.unitTabWgt.setVisible(False)
+        self.unitWgt.setVisible(False)
         self.nodeViewWgt.setVisible(False)
         '''工具栏'''
         self.toolBar.setFixedHeight(glb_dmsContext.TOOLBAR_HEIGHT)
@@ -92,12 +93,14 @@ class DMSMainWin(QMainWindow):
 
     def updateUiEnabled(self):
         self.buildingWgt.updateUiEnabled()
-        self.unitTabWgt.updateUiEnabled()
-        self.unitTabWgt.setVisible(not isProjectNull())
+        self.unitWgt.updateUiEnabled()
+        self.unitWgt.setVisible(not isProjectNull())
         self.nodeViewWgt.setVisible(not isProjectNull())
 
-    def buildingChanged(self, current, previous):
-        self.unitTabWgt.updateUnitDate(current, previous)
+    def buildingChanged(self, current_id, previous_id):
+        #self.unitWgt.updateUnitDate(current, previous)
+
+        self.unitWgt.setCurrentBuilding(current_id)
 
     # 接受各组件信号
     def editTask(self):
@@ -105,4 +108,5 @@ class DMSMainWin(QMainWindow):
         self.decorateTypeWgt.showNormal()
 
     def updateUnitTabWgd(self, current, previous):
-        self.unitTabWgt.updateUnitDate(current, previous)
+        #self.unitTabWgt.updateUnitDate(current, previous)
+        pass

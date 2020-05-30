@@ -1,7 +1,7 @@
 # 数据库类
 
 import sqlalchemy as sa
-from sqlalchemy import MetaData
+from sqlalchemy import MetaData, text, func
 from sqlalchemy import Table
 from sqlalchemy.schema import *
 from sqlalchemy.engine import Engine
@@ -51,7 +51,6 @@ class DMSDatabase(object):
     def dbVersion(self):
         pass
 
-
     def getTableList(self, table, filter_str=None):
         """
 
@@ -63,8 +62,25 @@ class DMSDatabase(object):
             table_list = self.session.query(table).all()
             return table_list
         # table_list = self.session.query(table).filter(filter_str).one_or_none()
-        table_list = self.session.query(table).filter(filter_str)
+        table_list = self.session.query(table).filter(text(filter_str)).all()
         return table_list
+
+    def getTableRecordCount(self, table, _filter) -> int:
+        count = self.session.query(table).filter(text(_filter)).count()
+        return count + 1
+
+    def getRecordById(self, table, _id):
+        item = self.session.query(table).filter_by(id=_id).one_or_none()
+        return item
+
+    def getMaxOrder(self, table) -> int:
+        max_int = 1
+        items = self.session.query(func.max(table.order)).all()
+        if items is None or len(items) <= 1:
+            return max_int
+        return items[0].order
+
+        #item = self.session.query(table).from_statement(text("select max(order) from "+table.____tablename__+"")).one_or_none()
 
     # 添加记录
     def addRecord(self, record):
@@ -74,9 +90,9 @@ class DMSDatabase(object):
         self.session.commit()
 
     # 更新记录
-    def updateRecord(self, tableName, record):
+    def updateRecord(self, table, record):
         filterName, filterValue, recordKey, recordValue = record
-        self.session.query(tableName).filter_by(filterName=1).update({recordKey: recordValue})
+        self.session.query(table).filter_by(filterName=1).update({recordKey: recordValue})
         self.session.commit()
 
     # 删除记录
