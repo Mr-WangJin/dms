@@ -45,7 +45,7 @@ class GNode(QGraphicsItem):
     brush = QBrush(QColor("#C7EEE7"))
     radius = 6
 
-    def __init__(self, taskInfo: DB_Decorate_Type):
+    def __init__(self, taskInfo: DB_Decorate_Type, parent=None):
         """
         1、本图例为节点图例，内有多个子图例，该自图例在实例化时，必须要注意传入self，否则子图例不知道父图例是谁，
         就无法和父图例一同展示到scene上。
@@ -53,7 +53,7 @@ class GNode(QGraphicsItem):
         3、
         :param nodeProxy:
         """
-        super().__init__()
+        super().__init__(parent=parent)
         self.gID = taskInfo.id
         self.order = taskInfo.order
         self.gTaskName = QGraphicsTextItem(taskInfo.name, self)
@@ -121,8 +121,10 @@ class GNode(QGraphicsItem):
 
     def boundingRect(self) -> QtCore.QRectF:
         return QRectF(
-            0, 0, self.radius + self.node_width + self.radius,
-                  self.radius + self.node_height + self.radius
+            0,
+            0,
+            self.radius + self.node_width + self.radius,
+            self.radius + self.node_height + self.radius
         ).normalized()
 
     def paint(self, painter: QPainter, option, widget=None) -> None:

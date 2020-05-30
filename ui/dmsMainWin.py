@@ -1,6 +1,6 @@
 # encoding: utf-8
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QHBoxLayout, QVBoxLayout, QAction, QToolBar
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QHBoxLayout, QVBoxLayout, QAction, QToolBar, QTreeWidgetItem
 
 from bll.dmsProject import *
 from nodeeditor.NodeEditerWidget.NodeEditorWidget import NodeEditorWidget

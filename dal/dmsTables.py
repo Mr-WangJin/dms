@@ -72,7 +72,7 @@ class DB_Decorate_Type(Base):
     id = Column(Integer, primary_key=True)
     order = Column(Integer, unique=True)
     name = Column(String(32))
-    pre_task = Column(Integer)  # 前置任务
+    pre_task = Column(String(32))  # 前置任务
     duration = Column(Integer)  # 工期
     room_belong = Column(String(32))  # 房间归属
     responsible = Column(String(32))  # 责任人

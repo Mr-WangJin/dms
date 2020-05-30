@@ -22,7 +22,6 @@ class NodeEditorWidget(QMainWindow):
         self.nodesDict: Dict[str, GNode] = {}
         self.edgesDict: Dict[str, GEdge] = {}
         self.__initUI__()
-        self.addDemoNode()
 
     def __initUI__(self):
         self.view.setScene(self.scene)
@@ -35,10 +34,10 @@ class NodeEditorWidget(QMainWindow):
         self.setCentralWidget(widget)
 
     def addDemoNode(self):
-        # taskInfo = {"taskID": "1", "taskName": "任务1"}
-        # self.addNode(taskInfo)
-        # taskInfo = {"taskID": "2", "taskName": "任务1"}
-        # self.addNode(taskInfo)
+        taskInfo = {"taskID": "1", "taskName": "任务1"}
+        self.addNode(taskInfo)
+        taskInfo = {"taskID": "2", "taskName": "任务1"}
+        self.addNode(taskInfo)
         pass
 
     def addNode(self, taskInfo):
@@ -59,13 +58,6 @@ class NodeEditorWidget(QMainWindow):
             return True
         else:
             return False
-
-    def freshGraphics(self):
-        """
-        用于切换单体时，刷新Node布局
-        :return:
-        """
-        pass
 
     def freshNodeStatus(self):
         """
@@ -109,7 +101,7 @@ class NodeEditorWidget(QMainWindow):
 
     def updateTaskNode(self, currentBuildingID):
         """
-        当切换页面或者编辑任务或，触发此方法，用于刷新数据。
+        当切换页面或者编辑任务或，触发此方法，用于刷Node节点数据。
         1、清空页面
         2、加载数据
         3、绘制节点
@@ -132,7 +124,7 @@ class NodeEditorWidget(QMainWindow):
         for decorateTask in decorateTaskList:
             currentNodeID = str(decorateTask.order)
 
-            if decorateTask.pre_task != "":
+            if len(decorateTask.pre_task) != 0:
                 preTaskOrderList = str(decorateTask.pre_task).split(',')
                 for preTask in preTaskOrderList:
                     nodeID, nodeRelation = self.parsePerTaskExpress(preTask)
@@ -146,7 +138,6 @@ class NodeEditorWidget(QMainWindow):
                         pass
                     elif nodeRelation == "SF":
                         pass
-
             else:
                 return
 
