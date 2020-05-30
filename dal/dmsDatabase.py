@@ -96,11 +96,13 @@ class DMSDatabase(object):
         self.session.commit()
 
     # 删除记录
-    def deleteRecord(self, record):
+    def deleteRecord(self, record) -> bool:
         if record is None or self.session is None:
-            return 0
+            return False
         self.session.delete(record)
         self.session.commit()
+        return True
+
 
     # 提交
     def commit(self):

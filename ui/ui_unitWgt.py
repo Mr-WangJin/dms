@@ -70,8 +70,6 @@ class Ui_UnitWgt(object):
         self.pBtnDleleteUnit.setObjectName("pBtnDleleteUnit")
         self.horizontalLayout.addWidget(self.pBtnDleleteUnit)
         self.verticalLayout.addLayout(self.horizontalLayout)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem2)
 
         self.retranslateUi(UnitWgt)
         QtCore.QMetaObject.connectSlotsByName(UnitWgt)

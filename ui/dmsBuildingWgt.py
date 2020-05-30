@@ -7,7 +7,6 @@ from sqlalchemy import MetaData
 
 from bll.dmsBusiness import *
 from bll.dmsContext import *
-from dal.dmsTables import *
 from ui.ui_wgtBuilding import Ui_wgtBuilding
 from dal.dmsDatabase import *
 from PyQt5.QtCore import QObject, pyqtSignal
@@ -90,13 +89,7 @@ class DMSBuildingWgt(QWidget):
         dmsDatabase().addRecord(building)
         item = self.createTreeWidgetItem(building)
         self.ui.treeWidget.addTopLevelItem(item)
-
-        # self.updateBuilding()
-        #
-        # meta: MetaData = dmsDatabase().getMetadata()
-        # for var in meta.tables:
-        #     print(var)
-        # aa = DB_Building.metadata
+        self.updateUiEnabled()
 
     def deleteBuilding(self):
         item: QTreeWidgetItem = self.ui.treeWidget.currentItem()
@@ -106,8 +99,6 @@ class DMSBuildingWgt(QWidget):
         dmsDatabase().deleteRecord(cur_building)
         index: QModelIndex = self.ui.treeWidget.currentIndex()
         self.ui.treeWidget.takeTopLevelItem(index.row())
-
-        # self.updateBuilding()
 
     def updateUiEnabled(self):
         """

@@ -14,6 +14,7 @@ from bll.dmsContext import dmsProject, isProjectNull, dmsDatabase
 from dal.dmsTables import *
 from ui.dmsDecorateType import DMSDecorateTypeWgt
 from ui.ui_unitWgt import *
+from ui.dmsDecorateData import *
 
 
 class DMSUnitWgt(QWidget):
@@ -33,14 +34,14 @@ class DMSUnitWgt(QWidget):
         self.ui = Ui_UnitWgt()
         self.ui.setupUi(self)
         self.decorateTypeWgt = DMSDecorateTypeWgt(self)
+        self.decorateDataWgt = DMSDecorateDataWgt(self)
         count = self.ui.verticalLayout.count()
-        self.ui.verticalLayout.insertWidget(count - 1, self.decorateTypeWgt)
+        self.ui.verticalLayout.addWidget(self.decorateDataWgt)
         self.groupButton = QButtonGroup(self)
 
     def initTrigger(self):
         self.ui.pBtnAddUnit.clicked.connect(self.addUnit)
         self.ui.pBtnDleleteUnit.clicked.connect(self.deleteUnit)
-
 
     def setCurrentBuilding(self, building_id):
         if self.currentBuilding and self.currentBuilding.id == building_id:
@@ -61,7 +62,13 @@ class DMSUnitWgt(QWidget):
         unit_tool_btn.setChecked(True)
 
     def deleteUnit(self):
-        pass
+        _id = self.groupButton.checkedId()
+        _button = self.groupButton.checkedButton()
+
+        self.groupButton.removeButton(_button)
+        delete(_button)
+        customDeleteRecord(DB_Building_Unit, _id)
+        self.updateUiEnabled()
 
     def createToolButton(self, business_unit) -> QToolButton:
         unit_tool_btn = QToolButton()
@@ -70,7 +77,7 @@ class DMSUnitWgt(QWidget):
         count = self.ui.horizontalLayout.count()
         self.ui.horizontalLayout.insertWidget(count - 3, unit_tool_btn)
         self.unitDict[business_unit.id] = unit_tool_btn
-        self.groupButton.addButton(unit_tool_btn)
+        self.groupButton.addButton(unit_tool_btn, business_unit.id)
 
         return unit_tool_btn
 
@@ -86,7 +93,6 @@ class DMSUnitWgt(QWidget):
             if first_item is None:
                 first_item = unit_tool_btn
         first_item.setChecked(True)
-
 
     def clearUnit(self):
         if len(self.unitDict) == 0:
@@ -120,7 +126,11 @@ class DMSUnitWgt(QWidget):
         # dateTableWidget.setHorizontalHeaderLabels(tableHeaderList)
 
     def updateUiEnabled(self):
-        pass
-        # enabled = False if isProjectNull() else True
-        # for act in self.toolBar.actions():
-        #     act.setEnabled(enabled)
+        enabled = False
+        if len(self.unitDict) == 0:
+            enabled = False
+        else:
+            enabled = True
+
+        self.ui.pBtnDleleteUnit.setEnabled(enabled)
+
