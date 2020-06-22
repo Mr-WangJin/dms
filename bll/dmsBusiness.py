@@ -18,6 +18,8 @@ def newBuilding() -> DB_Building:
 
 
 def newUnit(building: DB_Building) -> DB_Building_Unit:
+    if building is None:
+        return
     unit = DB_Building_Unit()
     unit.building_id = building.id
     count = dmsDatabase().getTableRecordCount(DB_Building_Unit, "building_id = " + str(building.id))

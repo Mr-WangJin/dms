@@ -1,4 +1,5 @@
 # 数据库类
+from typing import List
 
 import sqlalchemy as sa
 from sqlalchemy import MetaData, text, func
@@ -31,7 +32,6 @@ class DMSDatabase(object):
         # 反射表
         meta_table = Table(table_str, self.metadata, autoload=True, autoload_with=self.__engine__)
         return meta_table
-        pass
 
     # 打开数据库
     def openDatabase(self, filename):
@@ -53,6 +53,8 @@ class DMSDatabase(object):
         self.session = db_session()
         self.metadata = MetaData(bind=self.__engine__)
 
+        print("新建数据库")
+
     def closeDatabase(self):
         pass
 
@@ -60,7 +62,7 @@ class DMSDatabase(object):
     def dbVersion(self):
         pass
 
-    def getTableList(self, table, filter_str=None):
+    def getTableList(self, table, filter_str=None) -> List:
         """
 
         :param table: 获取表记录
@@ -96,20 +98,20 @@ class DMSDatabase(object):
         if record is None or self.session is None:
             return 0
         self.session.add(record)
-        self.session.commit()
+        self.commit()
 
     # 更新记录
     def updateRecord(self, table, record):
         filterName, filterValue, recordKey, recordValue = record
         self.session.query(table).filter_by(filterName=1).update({recordKey: recordValue})
-        self.session.commit()
+        self.commit()
 
     # 删除记录
     def deleteRecord(self, record) -> bool:
         if record is None or self.session is None:
             return False
         self.session.delete(record)
-        self.session.commit()
+        self.commit()
         return True
 
 

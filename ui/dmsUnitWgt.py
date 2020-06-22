@@ -19,7 +19,8 @@ from ui.dmsDecorateData import *
 
 class DMSUnitWgt(QWidget):
     unitTabDataWdg = None
-    decorateTypeWgt = None
+    decorateTypeWgt: DMSDecorateTypeWgt = None
+    decorateDataWgt: DMSDecorateDataWgt = None
 
     currentBuilding: DB_Building = None
     unitDict: dict = {}
@@ -38,6 +39,10 @@ class DMSUnitWgt(QWidget):
         count = self.ui.verticalLayout.count()
         self.ui.verticalLayout.addWidget(self.decorateDataWgt)
         self.groupButton = QButtonGroup(self)
+        self.groupButton.buttonClicked.connect(self.unitChanged)
+
+    def unitChanged(self):
+        self.decorateDataWgt.
 
     def initTrigger(self):
         self.ui.pBtnAddUnit.clicked.connect(self.addUnit)
@@ -56,6 +61,9 @@ class DMSUnitWgt(QWidget):
         self.loadUnit()
         self.updateUiEnabled()
 
+    def getCurrentUnit(self):
+        
+
     def addUnit(self):
         unit = newUnit(self.currentBuilding)
         unit_tool_btn = self.createToolButton(unit)
@@ -71,6 +79,8 @@ class DMSUnitWgt(QWidget):
         self.updateUiEnabled()
 
     def createToolButton(self, business_unit) -> QToolButton:
+        if business_unit is None:
+            return
         unit_tool_btn = QToolButton()
         unit_tool_btn.setText(business_unit.name)
         unit_tool_btn.setCheckable(True)
