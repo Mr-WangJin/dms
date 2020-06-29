@@ -9,6 +9,7 @@ from ui.dmsDecorateType import DMSDecorateTypeWgt
 from ui.dmsUnitWgt import DMSUnitWgt
 from ui.ui_mainWin import Ui_MainWindow
 
+
 class DMSMainWin(QMainWindow):
     WIDGET_SPACING = 4
     BUILDINGWGT_WIDTH = 320
@@ -98,8 +99,7 @@ class DMSMainWin(QMainWindow):
         self.nodeViewWgt.setVisible(not isProjectNull())
 
     def buildingChanged(self, current_id, previous_id):
-        #self.unitWgt.updateUnitDate(current, previous)
-
+        # self.unitWgt.updateUnitDate(current, previous)
         self.unitWgt.setCurrentBuilding(current_id)
 
     # 接受各组件信号
@@ -108,5 +108,5 @@ class DMSMainWin(QMainWindow):
         self.decorateTypeWgt.showNormal()
 
     def updateUnitTabWgd(self, current, previous):
-        #self.unitTabWgt.updateUnitDate(current, previous)
+        # self.unitTabWgt.updateUnitDate(current, previous)
         pass

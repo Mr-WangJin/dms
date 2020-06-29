@@ -5,6 +5,7 @@ from PyQt5.QtCore import Qt, QModelIndex
 from PyQt5.QtWidgets import QWidget, QTreeWidgetItem, QAbstractItemView, QAction
 from sqlalchemy import MetaData
 
+from bll import dmsBusiness
 from bll.dmsBusiness import *
 from bll.dmsContext import *
 from ui.ui_wgtBuilding import Ui_wgtBuilding
@@ -21,6 +22,7 @@ class DMSBuildingWgt(QWidget):
         super(DMSBuildingWgt, self).__init__(parent)
         self.ui = Ui_wgtBuilding()
         self.actMoveUp = QAction("上移")
+        self.actMoveDown = QAction("下移")
         self.initUI()
         self.initTrigger()
 
@@ -29,7 +31,7 @@ class DMSBuildingWgt(QWidget):
     def initUI(self):
         self.ui.setupUi(self)
         self.ui.treeWidget.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.AnyKeyPressed)
-        self.setStyleSheet("QWidget::Item{}")
+        # self.setStyleSheet("QWidget::Item{}")
         self.setFixedWidth(320)
 
     def initTrigger(self):
@@ -51,15 +53,18 @@ class DMSBuildingWgt(QWidget):
             pre_building = previous.data(0, Qt.UserRole)
             self.sigBuildingChanged.emit(cur_building.id, pre_building.id)
 
-    # 刷新单体树
+    @updateRecord
+    def itemDataChanged(self, item: QTreeWidgetItem):
+        building = DB_Building(id=item.text(0), name=text(0))
+        return building
+
     def updateBuilding(self):
         """
-        刷新单体
+        刷新单体列表
         :return:
         """
         self.ui.treeWidget.clear()
-        building_list = dmsDatabase().getTableList(DB_Building)
-
+        building_list = dmsBusiness.getBuildingList()
         # rootItem = QTreeWidgetItem()
         # rootItem.setHidden(True)
         building: DB_Building
@@ -84,12 +89,14 @@ class DMSBuildingWgt(QWidget):
         building = item.data(0, Qt.UserRole)
         return building
 
+    # @addRecord
     def addNewBuilding(self):
-        building = newBuilding()
-        dmsDatabase().addRecord(building)
+        building = DB_Building()
+        building.name = "单体"
+        # dmsDatabase().addRecord(building)
         item = self.createTreeWidgetItem(building)
         self.ui.treeWidget.addTopLevelItem(item)
-        self.updateUiEnabled()
+        return building
 
     def deleteBuilding(self):
         item: QTreeWidgetItem = self.ui.treeWidget.currentItem()
@@ -107,5 +114,5 @@ class DMSBuildingWgt(QWidget):
         """
         enabled = isProjectNull()
         enabled = not enabled
-        self.ui.toolBtnAdd.setEnabled(enabled)
-        self.ui.toolBtnDelete.setEnabled(enabled)
+        self.ui.toolBtnAdd.setEnabled(enabled)  # 添加按钮
+        self.ui.toolBtnDelete.setEnabled(enabled)  # 删除按钮

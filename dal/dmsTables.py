@@ -1,14 +1,17 @@
 # 数据表定义
+from datetime import datetime
 
-from sqlalchemy import Integer, Column, String, true, ForeignKey, Float
+from sqlalchemy import Integer, Column, String, true, ForeignKey, Float, Date, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
 
-### 单体
 class DB_Building(Base):
+    """
+    单体
+    """
     __tablename__ = "building"
 
     id = Column(Integer, primary_key=True)
@@ -21,17 +24,10 @@ class DB_Building(Base):
         return "<User(id= '%s', name='%s')>" % (self.id, self.name)
 
 
-# ## 户型
-# class DB_StructType(Base):
-# 	__tablename__ = "struct_type"
-#
-# 	id = Column(Integer, primary_key=True)
-#     name = Column(String(32))
-#
-# 	building = relationship("building", backref="my_struct_type")
-
-### 单元
 class DB_Building_Unit(Base):
+    """
+    单元
+    """
     __tablename__ = "building_unit"
 
     id = Column(Integer, primary_key=True)
@@ -44,8 +40,10 @@ class DB_Building_Unit(Base):
     __mapper_args__ = {"order_by": order}
 
 
-### 楼层
 class DB_Floor(Base):
+    """
+    楼层
+    """
     __tablename__ = "floor"
 
     id = Column(Integer, primary_key=True)
@@ -55,8 +53,10 @@ class DB_Floor(Base):
     order = Column(Integer)
 
 
-### 户名
 class DB_Struct_Name(Base):
+    """
+    户名
+    """
     __tablename__ = "struct_name"
 
     id = Column(Integer, primary_key=True)
@@ -65,8 +65,11 @@ class DB_Struct_Name(Base):
     floor = relationship("DB_Floor", backref="struct_name_floor")
 
 
-### 装修类型
 class DB_Decorate_Type(Base):
+    """
+    计划模板
+
+    """
     __tablename__ = "decorate_type"
 
     id = Column(Integer, primary_key=True, comment='主键')
@@ -81,32 +84,33 @@ class DB_Decorate_Type(Base):
     node_x = Column(Float, comment='X')  # node 节点位置坐标_x
     node_y = Column(Float, comment='Y')  # node 节点位置坐标_y
 
-    building_id = Column(Integer, ForeignKey("building.id"))
-    building = relationship("DB_Building", backref="decorate_type_of_building")
+    # building_id = Column(Integer, ForeignKey("building.id"))  # 单体外键
+    # building = relationship("DB_Building", backref="decorate_type_of_building")
+    #
+    # building_unit_id = Column(Integer, ForeignKey("building_unit.id"))  # 单元外键
+    # building_unit = relationship("DB_Building_Unit", backref="floor_of_building")
 
 
-### 单元装修数据
 class DB_Unit_Decorate_Data(Base):
+    """
+    单元装修数据
+    """
     __tablename__ = "unit_decorate_data"
 
     id = Column(Integer, primary_key=True)
+    update_data = Column(Date)  # 登记时间
+    building_id = Column(Integer, ForeignKey("building.id"))  # 户名
     struct_name_id = Column(Integer, ForeignKey("struct_name.id"))  # 户名
     struct_name = relationship("DB_Struct_Name", backref="decorate_data_of_struct_name")
-
-    building_id = Column(Integer, ForeignKey("building.id"))  # 户名
     building = relationship("DB_Building", backref="decorate_data_of_building")
-
+    create_time = Column(DateTime, nullable=False, default=datetime.now)
     data = Column(String)  # json数据
 
 
-# 数据库版本
 class DB_Version(object):
+    """数据库版本"""
+
     __tablename__ = "db_version"
 
     version = Column(Integer)  # 数据库版本
     data_version = Column(Integer)  # 数据版本
-
-
-
-
-

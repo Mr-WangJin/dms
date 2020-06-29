@@ -4,7 +4,7 @@ from sqlalchemy import Table, create_engine, MetaData, select, func, Column, Int
 
 engine = create_engine("sqlite:///C:/Users/JK/Desktop/88.dms")
 metadata = MetaData(bind=engine)
-#metadata.create_all(engine)
+# metadata.create_all(engine)
 
 # 开启一个连接
 conn = engine.connect()
@@ -18,12 +18,13 @@ building = Table("building", metadata, autoload=True, autoload_with=engine)
 
 # table
 user = Table("user", metadata,
-        Column("id", Integer, nullable=False, primary_key=True, autoincrement=True),
-        Column("username", String(20), nullable=False),
-        Column("age", Integer, nullable=False),
-        Column("sex", SmallInteger, default=1),
-        Column("create_time", DateTime, default=datetime.now)
-    )
+             Column("id", Integer, nullable=False, primary_key=True, autoincrement=True),
+             Column("username", String(20), nullable=False),
+             Column("age", Integer, nullable=False),
+             Column("sex", SmallInteger, default=1),
+             Column("create_time", DateTime, default=datetime.now)
+             )
+
 
 # 插入
 def insert():

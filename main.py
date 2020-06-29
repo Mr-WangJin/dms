@@ -3,7 +3,7 @@ import platform
 import sys
 
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import QSysInfo
+from PyQt5.QtGui import QFontDatabase
 from PyQt5.QtWidgets import QApplication
 from ui.dmsMainWin import DMSMainWin
 import traceback
@@ -49,7 +49,10 @@ if __name__ == '__main__':
         styleSheet = file.readlines()
         styleSheet = ''.join(styleSheet).strip('\n')
         app.setStyleSheet(styleSheet)
-
+    '''添加字体文件'''
+    font_id = QFontDatabase.addApplicationFont("fontawesome-webfont.ttf")
+    # fontName = QFontDatabase.applicationFontFamilies(font_id)[0]
+    
     main_form = DMSMainWin()
     main_form.showMaximized()
     # 系统exit()方法确保应用程序干净的退出

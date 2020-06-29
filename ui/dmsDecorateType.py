@@ -8,13 +8,14 @@ from PyQt5.QtCore import QModelIndex, Qt
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5.QtWidgets import QDialog, QHBoxLayout, QTableWidget, QApplication, QAbstractItemView, QAction, QToolBar, QVBoxLayout, QPushButton, \
     QSizePolicy, QSpacerItem, QTableWidgetItem, QColorDialog
-#from qtconsole.qt import QtGui
+# from qtconsole.qt import QtGui
 
 from bll import dmsContext
 from bll.dmsContext import dmsDatabase, glb_dmsContext
 from config import Config
 from dal.dmsTables import DB_Decorate_Type
 from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GNode import GNode
+import qtawesome
 
 
 class DMSDecorateTypeWgt(QDialog):
@@ -45,8 +46,8 @@ class DMSDecorateTypeWgt(QDialog):
         self.actDelTask = QAction(text="删除")
         self.toolBar.addAction(self.actInsertTask)
         self.toolBar.addAction(self.actDelTask)
-        self.commitBtn = QPushButton("确定")
-        self.cancelBtn = QPushButton("取消")
+        self.commitBtn = QPushButton(qtawesome.icon('fa.check'), "确定")
+        self.cancelBtn = QPushButton(qtawesome.icon('fa.times'), "取消")
         self.initUI()
         self.initSignal()
         pass
@@ -58,7 +59,7 @@ class DMSDecorateTypeWgt(QDialog):
         self.cancelBtn.clicked.connect(self.cancel)  # 取消
 
     def initUI(self):
-        '''布局'''
+        """布局"""
         self.setWindowTitle("编辑计划模板")
         self.setWindowModality(Qt.WindowModal)
         layout = QVBoxLayout(self)

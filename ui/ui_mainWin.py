@@ -8,6 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import qtawesome
 
 
 class Ui_MainWindow(object):
@@ -23,7 +24,7 @@ class Ui_MainWindow(object):
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
         MainWindow.setMenuBar(self.menubar)
-        self.actNewProject = QtWidgets.QAction(MainWindow)
+        self.actNewProject = QtWidgets.QAction(qtawesome.icon('fa.building'), '新建工程', MainWindow)
         self.actNewProject.setObjectName("actNewProject")
         self.actOpenProject = QtWidgets.QAction(MainWindow)
         self.actOpenProject.setObjectName("actOpenProject")

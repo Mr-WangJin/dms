@@ -1,9 +1,10 @@
 import sys
-from typing import Dict
+from typing import Dict, OrderedDict, List
 
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtWidgets import QWidget, QMainWindow, QHBoxLayout, QApplication, QTableWidget
 
+from bll.dmsBusiness import addRecord, getRecords
 from bll.dmsContext import dmsProject
 from dal.dmsTables import DB_Decorate_Type
 from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GEdge import GEdge
@@ -19,8 +20,8 @@ class NodeEditorWidget(QMainWindow):
         super().__init__(parent)
         self.view = NodeEditorView()
         self.scene = GScene()
-        self.nodesDict: Dict[str, GNode] = {}
-        self.edgesDict: Dict[str, GEdge] = {}
+        self.nodesDict: OrderedDict[str, GNode] = {}
+        self.edgesDict: OrderedDict[str, GEdge] = {}
         self.__initUI__()
 
     def __initUI__(self):
@@ -40,6 +41,7 @@ class NodeEditorWidget(QMainWindow):
         self.addNode(taskInfo)
         pass
 
+    # @addRecord
     def addNode(self, taskInfo):
         """
         功能设想：通过节点对任务搭接关系进行设置。
@@ -146,6 +148,16 @@ class NodeEditorWidget(QMainWindow):
         for node in self.nodesDict.values():
             value = 'order', node.order, node.scenePos().x(), node.scenePos().y()
             dmsProject().updateRecord(DB_Decorate_Type, value)
+
+    @getRecords(filter=[])
+    def getNodes(self) -> List[GNode]:
+        return []
+
+    def drawNodes(self):
+        self.nodesDict.clear()
+        nodeList = self.getNodes()
+        for node in nodeList:
+            pass
 
 
 if __name__ == '__main__':
