@@ -4,13 +4,12 @@ from typing import Dict
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtWidgets import QWidget, QMainWindow, QHBoxLayout, QApplication, QTableWidget
 
-from bll.dmsContext import dmsProject
 from dal.dmsTables import DB_Decorate_Type
 from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GEdge import GEdge
 from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GNode import GNode
-from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GScene import GScene
 from nodeeditor.NodeEditerWidget.NodeEditorView import NodeEditorView
 import re
+from bll import dmsBusiness
 
 
 class NodeEditorWidget(QMainWindow):
@@ -18,14 +17,16 @@ class NodeEditorWidget(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.view = NodeEditorView()
-        self.scene = GScene()
-        self.nodesDict: Dict[str, GNode] = {}
-        self.edgesDict: Dict[str, GEdge] = {}
-        self.__initUI__()
+        self.nodesDict: Dict[str, GNode] = {}  # 用于存储用于在当前页面显示的node数据
+        self.edgesDict: Dict[str, GEdge] = {}  # 用于存储用于在当前页面显示的edge数据
+        self._initUI()
+        self._initInterAction()
 
-    def __initUI__(self):
-        self.view.setScene(self.scene)
-        self.setAttribute(Qt.WA_AcceptTouchEvents)
+    def _initUI(self):
+        '''
+        初始化页面布局
+        :return:
+        '''
         layout = QHBoxLayout()
         layout.addWidget(self.view)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -33,12 +34,55 @@ class NodeEditorWidget(QMainWindow):
         widget.setLayout(layout)
         self.setCentralWidget(widget)
 
-    def addDemoNode(self):
-        taskInfo = {"taskID": "1", "taskName": "任务1"}
-        self.addNode(taskInfo)
-        taskInfo = {"taskID": "2", "taskName": "任务1"}
-        self.addNode(taskInfo)
-        pass
+    def _initInterAction(self):
+        '''
+        初始化交互行为
+        :return:
+        '''
+        self.setAttribute(Qt.WA_AcceptTouchEvents)
+
+    def loadDate(self, current_unit_id):
+        '''
+        当加载页面数据模版时，根据计划模板构造node视图
+        为避免空指针，等Node全部构造完成后，构造Edge
+        :param current_unit_id:
+        :return:
+        '''
+        # 清空显示缓存
+        for node in self.nodesDict.values():
+            self.view.scene.removeItem(node)
+        self.nodesDict.clear()
+        for edge in self.edgesDict.values():
+            self.view.scene.removeItem(edge)
+        self.edgesDict.clear()
+
+        # 查询数据
+        records = dmsBusiness.getDecorateType(current_unit_id)
+        # 构造node
+        for record in records:
+            self.drawNode(record)
+        # 构造edge
+        for record in records:
+            self.drawEdge(record)
+
+    def drawNode(self, record: DB_Decorate_Type):
+        if record:
+            node = GNode(record)
+            self.nodesDict[record.id] = node
+            self.view.scene.addItem(node)
+            node.setPos(record.node_x, record.node_y)
+
+    def drawEdge(self, record: DB_Decorate_Type):
+        if record:
+            edge = GEdge()
+            self.edgesDict[record.id] = edge
+
+    # def addDemoNode(self):
+    #     taskInfo = {"taskID": "1", "taskName": "任务1"}
+    #     self.addNode(taskInfo)
+    #     taskInfo = {"taskID": "2", "taskName": "任务1"}
+    #     self.addNode(taskInfo)
+    #     pass
 
     def addNode(self, taskInfo):
         """
@@ -54,7 +98,7 @@ class NodeEditorWidget(QMainWindow):
         print(taskInfo["taskID"])
         if self.nodesDict.get(taskInfo["taskID"]) is None:
             self.nodesDict[taskInfo["taskID"]] = gNode
-            self.scene.addItem(gNode)
+            self.view.scene.addItem(gNode)
             return True
         else:
             return False

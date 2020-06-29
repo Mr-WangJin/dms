@@ -52,12 +52,12 @@ class NodeEditorView(QGraphicsView):
     def mousePressEvent(self, event: QtGui.QMouseEvent):
         if event.button() == Qt.MiddleButton:
             self.middleMouseButtonPress(event)
-        elif event.button() == Qt.LeftButton:
+        if event.button() == Qt.LeftButton:
             self.leftMouseButtonPress(event)
         #     # elif event.button() == Qt.RightButton:
         #     #     self.rightMouseButtonPress(event)
-        else:
-            super().mousePressEvent(event)
+
+        super().mousePressEvent(event)
 
     # def mouseReleaseEvent(self, event: QMouseEvent):
     #     # print(event.button(), 'release')

@@ -43,18 +43,18 @@ class GEdge(QGraphicsPathItem):
             QPainter.drawLine(self._x2, self._y2, self._x2 - 10, self._y2 + 5)
 
     def updatePath(self):
-        if self.startGSocket is not None:
+        if self.startGSocket:
             self._x1 = self.startGSocket.scenePos().x()
             self._y1 = self.startGSocket.scenePos().y()
-        elif self.startPosition is not None:
+        elif self.startPosition:
             self._x1 = self.startPosition.x()
             self._y1 = self.startPosition.y()
         else:
             return False
-        if self.endGSocket is not None:
+        if self.endGSocket:
             self._x2 = self.endGSocket.scenePos().x()
             self._y2 = self.endGSocket.scenePos().y()
-        elif self.endPosition is not None:
+        elif self.endPosition:
             self._x2 = self.endPosition.x()
             self._y2 = self.endPosition.y()
         else:

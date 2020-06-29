@@ -65,19 +65,23 @@ class GNode(QGraphicsItem):
         self.gFinishTime = QGraphicsTextItem('结束时间', self)
         self.gFinishCount = QGraphicsTextItem('已完空间数量', self)
         self.gBackgroundColor = QColor("#C7EEE7")
+
         # socket
         self.gStartSocket = GSocket(parent=self)
         self.gFinishSocket = GSocket(parent=self)
         # 绘制图形
         self._initUI()
+        self._initInterAction()
 
     def _initUI(self):
-        self.setFlag(QGraphicsItem.ItemIsSelectable)
-        self.setFlag(QGraphicsItem.ItemIsMovable)
         self._initTextItemStyle()
         self._initTextItemPosition()
         self._initSplitLine()
         self._initSocektPositon()
+
+    def _initInterAction(self):
+        self.setFlag(QGraphicsItem.ItemIsSelectable)
+        self.setFlag(QGraphicsItem.ItemIsMovable)
 
     def _initTextItemStyle(self):
         textItems = [
