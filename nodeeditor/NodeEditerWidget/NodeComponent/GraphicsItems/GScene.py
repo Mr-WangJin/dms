@@ -14,11 +14,12 @@ class GScene(QGraphicsScene):
     gridSize = 20
     rectSize = 64000
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
         self.initUI()
 
     def initUI(self):
+
         self.setSceneRect(-self.rectSize / 2, -self.rectSize / 2, self.rectSize, self.rectSize)
         self.setBackgroundBrush(QBrush(self.background_color))
 

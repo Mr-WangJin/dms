@@ -105,8 +105,3 @@ class DB_Version(object):
 
     version = Column(Integer)  # 数据库版本
     data_version = Column(Integer)  # 数据版本
-
-
-
-
-

@@ -34,12 +34,13 @@ class DMSUnitWgt(QWidget):
     def initUI(self):
         self.ui = Ui_UnitWgt()
         self.ui.setupUi(self)
+        self.ui.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.setContentsMargins(0, 0, 0, 0)
         self.decorateTypeWgt = DMSDecorateTypeWgt(self)
         self.decorateDataWgt = DMSDecorateDataWgt(self)
         count = self.ui.verticalLayout.count()
         self.ui.verticalLayout.addWidget(self.decorateDataWgt)
         self.groupButton = QButtonGroup(self)
-        self.groupButton.buttonClicked.connect(self.unitChanged)
 
     def unitChanged(self):
         # self.decorateDataWgt.
@@ -48,6 +49,7 @@ class DMSUnitWgt(QWidget):
     def initTrigger(self):
         self.ui.pBtnAddUnit.clicked.connect(self.addUnit)
         self.ui.pBtnDleleteUnit.clicked.connect(self.deleteUnit)
+        self.groupButton.buttonClicked.connect(self.unitChanged)
 
     def setCurrentBuilding(self, building_id):
         if self.currentBuilding and self.currentBuilding.id == building_id:

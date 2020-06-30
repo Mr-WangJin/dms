@@ -1,6 +1,6 @@
 # encoding: utf-8
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QHBoxLayout, QVBoxLayout, QAction, QToolBar, QTreeWidgetItem
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QHBoxLayout, QVBoxLayout, QAction, QToolBar, QTreeWidgetItem, QSplitter
 
 from bll.dmsProject import *
 from nodeeditor.NodeEditerWidget.NodeEditorWidget import NodeEditorWidget
@@ -8,6 +8,7 @@ from ui.dmsBuildingWgt import DMSBuildingWgt, isProjectNull
 from ui.dmsDecorateType import DMSDecorateTypeWgt
 from ui.dmsUnitWgt import DMSUnitWgt
 from ui.ui_mainWin import Ui_MainWindow
+
 
 class DMSMainWin(QMainWindow):
     WIDGET_SPACING = 4
@@ -59,23 +60,38 @@ class DMSMainWin(QMainWindow):
 
     def initUi(self):
         '''页面整体布局'''
+
+
+        '''building widget'''
+        self.buildingWgt = DMSBuildingWgt(self)
+        self.buildingWgt.sigBuildingChanged.connect(self.buildingChanged)
+        self.buildingWgt.setFixedWidth(DMSMainWin.BUILDINGWGT_WIDTH)
+
+        '''unit widget'''
+        self.unitWgt = DMSUnitWgt(self)
+        self.unitWgt.setMinimumWidth(DMSMainWin.UNITTABWGT_WIDTH)
+
+        '''node widget'''
+        self.nodeViewWgt = NodeEditorWidget(self)
+        self.nodeViewWgt.setMinimumWidth(DMSMainWin.NODEWGT_WIDTH)
+
+        '''right spliter'''
+        self.rightSpliter = QSplitter(Qt.Horizontal)
+        self.rightSpliter.addWidget(self.unitWgt)
+        self.rightSpliter.addWidget(self.nodeViewWgt)
+        self.rightSpliter.setStretchFactor(0,1)
+        self.rightSpliter.setStretchFactor(1,1)
+
+        '''主水平布局'''
         self.horizonlayout = QHBoxLayout(self)
         self.horizonlayout.setAlignment(Qt.AlignLeft)
         self.horizonlayout.setContentsMargins(0, 0, 0, 0)
         self.horizonlayout.setSpacing(DMSMainWin.WIDGET_SPACING)
-        self.buildingWgt = DMSBuildingWgt(self)
-        self.buildingWgt.sigBuildingChanged.connect(self.buildingChanged)
-        self.buildingWgt.setFixedWidth(DMSMainWin.BUILDINGWGT_WIDTH)
-        self.unitWgt = DMSUnitWgt(self)
-        self.unitWgt.setMinimumWidth(DMSMainWin.UNITTABWGT_WIDTH)
-        self.nodeViewWgt = NodeEditorWidget(self)
-        self.nodeViewWgt.setMinimumWidth(DMSMainWin.NODEWGT_WIDTH)
+
         self.horizonlayout.addWidget(self.buildingWgt)
-        self.horizonlayout.addWidget(self.unitWgt)
-        self.horizonlayout.addWidget(self.nodeViewWgt)
-        self.horizonlayout.setStretch(0, 0)
-        self.horizonlayout.setStretch(1, 1)
-        self.horizonlayout.setStretch(2, 1)
+        self.horizonlayout.addWidget(self.rightSpliter)
+        self.horizonlayout.setStretch(0, 1)
+        self.horizonlayout.setStretch(1, 4)
         self.centralWidget().setLayout(self.horizonlayout)
         self.unitWgt.setVisible(False)
         self.nodeViewWgt.setVisible(False)
@@ -98,7 +114,7 @@ class DMSMainWin(QMainWindow):
         self.nodeViewWgt.setVisible(not isProjectNull())
 
     def buildingChanged(self, current_id, previous_id):
-        #self.unitWgt.updateUnitDate(current, previous)
+        # self.unitWgt.updateUnitDate(current, previous)
 
         self.unitWgt.setCurrentBuilding(current_id)
 
@@ -108,5 +124,5 @@ class DMSMainWin(QMainWindow):
         self.decorateTypeWgt.showNormal()
 
     def updateUnitTabWgd(self, current, previous):
-        #self.unitTabWgt.updateUnitDate(current, previous)
+        # self.unitTabWgt.updateUnitDate(current, previous)
         pass

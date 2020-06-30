@@ -1,15 +1,19 @@
 import sys
-from typing import Dict
+from typing import Dict, List
 
 from PyQt5.QtCore import Qt, QPoint
-from PyQt5.QtWidgets import QWidget, QMainWindow, QHBoxLayout, QApplication, QTableWidget
+from PyQt5.QtGui import QCursor
+from PyQt5.QtWidgets import QWidget, QMainWindow, QHBoxLayout, QApplication, QTableWidget, QMenu, QAction
 
+from bll.dmsContext import DMSContext
 from dal.dmsTables import DB_Decorate_Type
 from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GEdge import GEdge
 from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GNode import GNode
 from nodeeditor.NodeEditerWidget.NodeEditorView import NodeEditorView
 import re
 from bll import dmsBusiness
+
+DEBUG = DMSContext.IS_DEBUG
 
 
 class NodeEditorWidget(QMainWindow):
@@ -40,15 +44,34 @@ class NodeEditorWidget(QMainWindow):
         :return:
         '''
         self.setAttribute(Qt.WA_AcceptTouchEvents)
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.rightMenu)  # 开放右键策略
 
-    def loadDate(self, current_unit_id):
-        '''
-        当加载页面数据模版时，根据计划模板构造node视图
-        为避免空指针，等Node全部构造完成后，构造Edge
-        :param current_unit_id:
-        :return:
-        '''
-        # 清空显示缓存
+    def mockData(self):
+        taskList = []
+        for i in range(5):
+            task = DB_Decorate_Type()
+            task.name = '任务' + i.__str__()
+            task.node_x = 0
+            task.node_y = 0
+            taskList.append(task)
+        return taskList
+
+    def rightMenu(self):
+        menu = QMenu(self)
+        ALoadData = QAction('加载数据', menu)
+        menu.addAction(ALoadData)
+        menu.addAction(QAction('动作2', menu))
+        menu.triggered.connect(self.menuSlot)
+        menu.exec_(QCursor.pos())
+
+    def menuSlot(self, act):
+        print(act.text())
+        if act.text() == '加载数据':
+            print('do loadData')
+            self.loadDate()
+
+    def clearScene(self):
         for node in self.nodesDict.values():
             self.view.scene.removeItem(node)
         self.nodesDict.clear()
@@ -56,8 +79,23 @@ class NodeEditorWidget(QMainWindow):
             self.view.scene.removeItem(edge)
         self.edgesDict.clear()
 
+    def loadDate(self, current_unit_id=None):
+        '''
+        当加载页面数据模版时，根据计划模板构造node视图
+        为避免空指针，等Node全部构造完成后，构造Edge
+        :param current_unit_id:
+        :return:
+        '''
+        # 清空显示缓存
+        self.clearScene()
+
         # 查询数据
-        records = dmsBusiness.getDecorateType(current_unit_id)
+        records = []
+        if current_unit_id:
+            records = dmsBusiness.getDecorateType(current_unit_id)
+        if DEBUG:
+            records = self.mockData()
+
         # 构造node
         for record in records:
             self.drawNode(record)
@@ -74,8 +112,12 @@ class NodeEditorWidget(QMainWindow):
 
     def drawEdge(self, record: DB_Decorate_Type):
         if record:
-            edge = GEdge()
-            self.edgesDict[record.id] = edge
+            result_list = self.parsePerTaskExpress(record.pre_task)
+            for preTaskId, preTaskType in result_list:
+                preNode = self.nodesDict.get(preTaskId)
+                curNone = self.nodesDict.get(record.id)
+                edge = GEdge(preNode, curNone, preTaskType)
+                self.edgesDict[record.id] = edge
 
     # def addDemoNode(self):
     #     taskInfo = {"taskID": "1", "taskName": "任务1"}
@@ -84,24 +126,24 @@ class NodeEditorWidget(QMainWindow):
     #     self.addNode(taskInfo)
     #     pass
 
-    def addNode(self, taskInfo):
-        """
-        功能设想：通过节点对任务搭接关系进行设置。
-        :param taskInfo:
-        :return:
-        1、封装信息
-        2、按ID添加Node到字典
-        3、绘制Node图形
-        """
-
-        gNode = GNode(taskInfo)
-        print(taskInfo["taskID"])
-        if self.nodesDict.get(taskInfo["taskID"]) is None:
-            self.nodesDict[taskInfo["taskID"]] = gNode
-            self.view.scene.addItem(gNode)
-            return True
-        else:
-            return False
+    # def addNode(self, taskInfo):
+    #     """
+    #     功能设想：通过节点对任务搭接关系进行设置。
+    #     :param taskInfo:
+    #     :return:
+    #     1、封装信息
+    #     2、按ID添加Node到字典
+    #     3、绘制Node图形
+    #     """
+    #
+    #     gNode = GNode(taskInfo)
+    #     print(taskInfo["taskID"])
+    #     if self.nodesDict.get(taskInfo["taskID"]) is None:
+    #         self.nodesDict[taskInfo["taskID"]] = gNode
+    #         self.view.scene.addItem(gNode)
+    #         return True
+    #     else:
+    #         return False
 
     def freshNodeStatus(self):
         """
@@ -130,18 +172,21 @@ class NodeEditorWidget(QMainWindow):
     #     for taskID, taskSequenceID, taskName, aheadTask, duration in tasksInfo:
     #         graph[taskSequenceID].append()
 
-    def parsePerTaskExpress(self, pre_task: str):
+    def parsePerTaskExpress(self, pre_task_express: str):
         """
         解析前置任务表达式
         :param pre_task:已校验过为非空对的前置任务表达式
         :return:task_order, task_relation
         """
-        task_order = re.match(r'\d+', pre_task, flags=0)  # 前置任务ID
-        task_relation = re.match(r'\D+', pre_task, flags=0)  # 前置任务关系
-        task_relation = 'FS' if task_relation == "" else str(task_relation).upper()
-
-        if str(task_relation) in ["FS", "SS", "SF", "FF"]:
-            return task_order, task_relation
+        result_list = []
+        pre_task_list = pre_task_express.split(',') if pre_task_express else []
+        for pre_task in pre_task_list:
+            task_order = re.match(r'\d+', pre_task, flags=0)  # 前置任务ID
+            task_relation = re.match(r'\D+', pre_task, flags=0)  # 前置任务关系
+            task_relation = 'FS' if task_relation == "" else str(task_relation).upper()
+            if str(task_relation) in ["FS", "SS", "SF", "FF"]:
+                result_list.append((task_order, task_relation))
+        return result_list
 
     def updateTaskNode(self, currentBuildingID):
         """
@@ -153,7 +198,7 @@ class NodeEditorWidget(QMainWindow):
         :return:
         """
         # 1、清空页面
-        self.scene.clear()
+        self.view.scene.clear()
         self.nodesDict.clear()
         self.edgesDict.clear()
         # 2、加载数据
