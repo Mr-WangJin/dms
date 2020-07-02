@@ -5,6 +5,7 @@ from PyQt5.QtCore import Qt, QModelIndex
 from PyQt5.QtWidgets import QWidget, QTreeWidgetItem, QAbstractItemView, QAction
 from sqlalchemy import MetaData
 
+from bll import dmsBusiness
 from bll.dmsBusiness import *
 from bll.dmsContext import *
 from ui.ui_wgtBuilding import Ui_wgtBuilding
@@ -20,14 +21,16 @@ class DMSBuildingWgt(QWidget):
     def __init__(self, parent=None):
         super(DMSBuildingWgt, self).__init__(parent)
         self.ui = Ui_wgtBuilding()
+
         self.actMoveUp = QAction("上移")
         self.initUI()
         self.initTrigger()
-
-        self.ui.treeWidget.currentItemChanged.connect(self.buildingChanged)
+        # self.ui.treeWidget.currentItemChanged.connect(self.buildingChanged)
 
     def initUI(self):
         self.ui.setupUi(self)
+        self.ui.treeWidget.setColumnCount(2)
+        self.ui.treeWidget.setColumnHidden(0, True)
         self.ui.treeWidget.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.AnyKeyPressed)
         self.setStyleSheet("QWidget::Item{}")
         self.setFixedWidth(320)
@@ -36,6 +39,7 @@ class DMSBuildingWgt(QWidget):
         self.ui.toolBtnAdd.clicked.connect(self.addNewBuilding)
         self.ui.toolBtnDelete.clicked.connect(self.deleteBuilding)
         # self.ui.treeWidget.currentItemChanged.connect(self.parent().buildingChanged)
+        self.ui.treeWidget.itemChanged.connect(self.updateBuilding)
 
     def buildingChanged(self, current, previous):
         if previous is None and current is None:
@@ -50,19 +54,21 @@ class DMSBuildingWgt(QWidget):
             cur_building = current.data(0, Qt.UserRole)
             pre_building = previous.data(0, Qt.UserRole)
             self.sigBuildingChanged.emit(cur_building.id, pre_building.id)
+        # ws
+        # cur = current.data(0, Qt.UserRole).id if current else -1
+        # pre = previous.data(0, Qt.UserRole).id if previous else -1
+        # self.sigBuildingChanged.emit(cur, pre)
 
-    # 刷新单体树
-    def updateBuilding(self):
+    def updateBuildingList(self):
         """
-        刷新单体
+        刷新单体列表的内容
         :return:
         """
         self.ui.treeWidget.clear()
-        building_list = dmsDatabase().getTableList(DB_Building)
+        building_list: List[DB_Building] = dmsDatabase().getTableList(DB_Building)
 
         # rootItem = QTreeWidgetItem()
         # rootItem.setHidden(True)
-        building: DB_Building
         for building in building_list:
             item = self.createTreeWidgetItem(building)
             # rootItem.addChild(item)
@@ -73,8 +79,9 @@ class DMSBuildingWgt(QWidget):
 
     def createTreeWidgetItem(self, building: DB_Building) -> QTreeWidgetItem:
         item = QTreeWidgetItem()
-        item.setText(0, building.name)
-        item.setData(0, Qt.UserRole, building)
+        item.setText(0, building.id.__str__())
+        item.setText(1, building.name)
+        # item.setData(0, Qt.UserRole, building)
         item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsEditable | Qt.ItemIsSelectable)
         return item
 
@@ -84,9 +91,9 @@ class DMSBuildingWgt(QWidget):
         building = item.data(0, Qt.UserRole)
         return building
 
+    # CRUD  ======================================================
     def addNewBuilding(self):
-        building = newBuilding()
-        dmsDatabase().addRecord(building)
+        building = dmsBusiness.newBuilding()
         item = self.createTreeWidgetItem(building)
         self.ui.treeWidget.addTopLevelItem(item)
         self.updateUiEnabled()
@@ -99,6 +106,12 @@ class DMSBuildingWgt(QWidget):
         dmsDatabase().deleteRecord(cur_building)
         index: QModelIndex = self.ui.treeWidget.currentIndex()
         self.ui.treeWidget.takeTopLevelItem(index.row())
+
+    def updateBuilding(self, item: QTreeWidgetItem, column):
+        building = DB_Building(id=item.text(0), name=item.text(1))
+        dmsBusiness.updateBuilding(building)
+
+
 
     def updateUiEnabled(self):
         """

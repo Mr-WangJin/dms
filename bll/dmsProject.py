@@ -2,6 +2,8 @@
 from bll.dmsContext import glb_dmsContext
 from dal.dmsDatabase import DMSDatabase
 
+# FILE_PATH = None  # 记录该工程的保存路径
+
 
 def newDMSProject(file_name):
     database = DMSDatabase()
@@ -21,4 +23,3 @@ class DMSProject(object):
 
     def __init__(self, database):
         self.dmsDatabase = database
-

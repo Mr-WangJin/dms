@@ -15,3 +15,8 @@ QFont {
 .QTabBar {
     border: 0px;
 }
+
+/*右侧可拖动的分割条*/
+QSplitter::handle:pressed {
+    background: "#123123";
+}

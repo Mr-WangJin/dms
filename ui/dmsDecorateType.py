@@ -14,7 +14,7 @@ from bll import dmsContext
 from bll.dmsContext import dmsDatabase, glb_dmsContext
 from config import Config
 from dal.dmsTables import DB_Decorate_Type
-from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GNode import GNode
+from ui.nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GNode import GNode
 
 
 class DMSDecorateTypeWgt(QDialog):

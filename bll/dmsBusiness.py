@@ -12,9 +12,14 @@ def customDeleteRecord(_table, _id):
 
 def newBuilding() -> DB_Building:
     building = DB_Building()
-    building.name = "测试新建单体"
-    building.order = dmsDatabase().getMaxOrder(DB_Building) + 1
-    return building
+    building.order = dmsDatabase().getCount(DB_Building) + 1
+    building.name = building.order.__str__() + '#楼'
+    if dmsDatabase().addRecord(building):
+        return building
+
+
+def updateBuilding(building: DB_Building):
+    dmsDatabase().updateRecord(building)
 
 
 def newUnit(building: DB_Building) -> DB_Building_Unit:
@@ -34,10 +39,9 @@ def deleteUnit(business_unit: DB_Building_Unit):
     dmsDatabase().deleteRecord(business_unit)
 
 
-def getDecorateType(unit_id)->List[DB_Decorate_Type]:
+def getDecorateType(unit_id) -> List[DB_Decorate_Type]:
     if unit_id:
         return dmsDatabase().getTableList(DB_Decorate_Type, filter_str=unit_id)
-
 
 
 class DMSUnitBll(object):

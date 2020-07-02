@@ -1,9 +1,12 @@
 # encoding: utf-8
+import time
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QHBoxLayout, QVBoxLayout, QAction, QToolBar, QTreeWidgetItem, QSplitter
 
+from bll import dmsBusiness
 from bll.dmsProject import *
-from nodeeditor.NodeEditerWidget.NodeEditorWidget import NodeEditorWidget
+from ui.nodeeditor.NodeEditerWidget.NodeEditorWidget import NodeEditorWidget
 from ui.dmsBuildingWgt import DMSBuildingWgt, isProjectNull
 from ui.dmsDecorateType import DMSDecorateTypeWgt
 from ui.dmsUnitWgt import DMSUnitWgt
@@ -34,6 +37,8 @@ class DMSMainWin(QMainWindow):
         # self.actNewProject = QAction("新建工程")
         self.initUi()
         self.initTrigger()
+        newDMSProject('./tmpProject/' + time.strftime("%Y%m%d-%H%M%S", time.gmtime()) + 'dms')
+        self.updateUiEnabled()
 
     def initTrigger(self):
         '''切换单体'''
@@ -54,13 +59,12 @@ class DMSMainWin(QMainWindow):
         if open_file[0] == "":
             return False
         openDMSProject(open_file[0])
-        self.buildingWgt.updateBuilding()
+        self.buildingWgt.updateBuildingList()
         self.updateUiEnabled()
         return True
 
     def initUi(self):
         '''页面整体布局'''
-
 
         '''building widget'''
         self.buildingWgt = DMSBuildingWgt(self)
@@ -77,10 +81,10 @@ class DMSMainWin(QMainWindow):
 
         '''right spliter'''
         self.rightSpliter = QSplitter(Qt.Horizontal)
-        self.rightSpliter.addWidget(self.unitWgt)
         self.rightSpliter.addWidget(self.nodeViewWgt)
-        self.rightSpliter.setStretchFactor(0,1)
-        self.rightSpliter.setStretchFactor(1,1)
+        self.rightSpliter.addWidget(self.unitWgt)
+        self.rightSpliter.setStretchFactor(0, 1)
+        self.rightSpliter.setStretchFactor(1, 1)
 
         '''主水平布局'''
         self.horizonlayout = QHBoxLayout(self)

@@ -7,8 +7,8 @@ from PyQt5.QtWidgets import QApplication, QGraphicsView
 
 from bll.dmsContext import DMSContext
 from dal.dmsTables import DB_Decorate_Type
-from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GNode import GSocket, GNode
-from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GScene import GScene
+from ui.nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GNode import GSocket, GNode
+from ui.nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GScene import GScene
 
 DEBUG = DMSContext.IS_DEBUG
 
@@ -65,7 +65,7 @@ class NodeEditorView(QGraphicsView):
             super().mousePressEvent(event)
 
     def mouseReleaseEvent(self, event: QMouseEvent):
-        if event.button() == Qt.MidButton:
+        if event.button() == Qt.MiddleButton:
             self.middleMouseButtonRelease(event)
         elif event.button() == Qt.LeftButton:
             self.leftMouseButtonRelease(event)
@@ -135,7 +135,7 @@ class NodeEditorView(QGraphicsView):
             self.START_SOCKET_IS_SELECTED = False
             return
 
-        super().mousePressEvent(event)
+        super().mouseReleaseEvent(event)
 
     def rightMouseButtonPress(self, event):
         super().mousePressEvent(event)

@@ -3,14 +3,15 @@ from typing import Dict, List
 
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QCursor
-from PyQt5.QtWidgets import QWidget, QMainWindow, QHBoxLayout, QApplication, QTableWidget, QMenu, QAction
+from PyQt5.QtWidgets import QWidget, QMainWindow, QHBoxLayout, QApplication, QMenu, QAction
 
 from bll.dmsContext import DMSContext
 from dal.dmsTables import DB_Decorate_Type
-from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GEdge import GEdge
-from nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GNode import GNode
-from nodeeditor.NodeEditerWidget.NodeEditorView import NodeEditorView
+from ui.nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GEdge import GEdge
+from ui.nodeeditor.NodeEditerWidget.NodeComponent.GraphicsItems.GNode import GNode
+from ui.nodeeditor.NodeEditerWidget.NodeEditorView import NodeEditorView
 import re
+
 from bll import dmsBusiness
 
 DEBUG = DMSContext.IS_DEBUG
@@ -58,9 +59,15 @@ class NodeEditorWidget(QMainWindow):
         return taskList
 
     def rightMenu(self):
+        '''
+        右键菜单
+        :return:
+        '''
         menu = QMenu(self)
-        ALoadData = QAction('加载数据', menu)
-        menu.addAction(ALoadData)
+
+        # 判别右键菜单类型
+        ActLoadData = QAction('加载数据', menu)
+        menu.addAction(ActLoadData)
         menu.addAction(QAction('动作2', menu))
         menu.triggered.connect(self.menuSlot)
         menu.exec_(QCursor.pos())
@@ -72,6 +79,10 @@ class NodeEditorWidget(QMainWindow):
             self.loadDate()
 
     def clearScene(self):
+        '''
+        用户切换单元时或其他情况下，清空页面显示并清空缓存的node和edge数据
+        :return:
+        '''
         for node in self.nodesDict.values():
             self.view.scene.removeItem(node)
         self.nodesDict.clear()
@@ -118,32 +129,7 @@ class NodeEditorWidget(QMainWindow):
                 curNone = self.nodesDict.get(record.id)
                 edge = GEdge(preNode, curNone, preTaskType)
                 self.edgesDict[record.id] = edge
-
-    # def addDemoNode(self):
-    #     taskInfo = {"taskID": "1", "taskName": "任务1"}
-    #     self.addNode(taskInfo)
-    #     taskInfo = {"taskID": "2", "taskName": "任务1"}
-    #     self.addNode(taskInfo)
-    #     pass
-
-    # def addNode(self, taskInfo):
-    #     """
-    #     功能设想：通过节点对任务搭接关系进行设置。
-    #     :param taskInfo:
-    #     :return:
-    #     1、封装信息
-    #     2、按ID添加Node到字典
-    #     3、绘制Node图形
-    #     """
-    #
-    #     gNode = GNode(taskInfo)
-    #     print(taskInfo["taskID"])
-    #     if self.nodesDict.get(taskInfo["taskID"]) is None:
-    #         self.nodesDict[taskInfo["taskID"]] = gNode
-    #         self.view.scene.addItem(gNode)
-    #         return True
-    #     else:
-    #         return False
+        return
 
     def freshNodeStatus(self):
         """
@@ -151,26 +137,6 @@ class NodeEditorWidget(QMainWindow):
         :return:
         """
         pass
-
-    # def parse2Graph(self, tasksInfo):
-    #     """
-    #     用于从数据库读取计划模版，解析网络关系，构建连接线。
-    #     !!!  sequenceID要在包内唯一
-    #     1、构件图结构
-    #         { 任务序号1，[前置任务1,前置任务2] ,
-    #           任务序号2，[前置任务1,前置任务2] ,
-    #           任务序号3，[前置任务1,前置任务2] }
-    #     2、计算节点布局
-    #     3、添加连接线
-    #     :param tasksInfo:
-    #     :return:
-    #     """
-    #     graph: {str, []} = dict
-    #     for taskID, taskSequenceID, taskName, aheadTask, duration in tasksInfo:
-    #         graph['taskSequenceID'] = []
-    #
-    #     for taskID, taskSequenceID, taskName, aheadTask, duration in tasksInfo:
-    #         graph[taskSequenceID].append()
 
     def parsePerTaskExpress(self, pre_task_express: str):
         """
@@ -188,53 +154,53 @@ class NodeEditorWidget(QMainWindow):
                 result_list.append((task_order, task_relation))
         return result_list
 
-    def updateTaskNode(self, currentBuildingID):
-        """
-        当切换页面或者编辑任务或，触发此方法，用于刷Node节点数据。
-        1、清空页面
-        2、加载数据
-        3、绘制节点
-        4、绘制连线
-        :return:
-        """
-        # 1、清空页面
-        self.view.scene.clear()
-        self.nodesDict.clear()
-        self.edgesDict.clear()
-        # 2、加载数据
-        decorateTaskList = dmsProject().getTableList(DB_Decorate_Type, filter_str=currentBuildingID)
-        # 3、绘制节点
-        decorateTask: DB_Decorate_Type
-        for decorateTask in decorateTaskList:
-            node = GNode(decorateTask)
-            node.setPos(decorateTask.node_x, decorateTask.node_y)
-            self.nodesDict[node.order] = node
-        # 4、绘制连线
-        for decorateTask in decorateTaskList:
-            currentNodeID = str(decorateTask.order)
-
-            if len(decorateTask.pre_task) != 0:
-                preTaskOrderList = str(decorateTask.pre_task).split(',')
-                for preTask in preTaskOrderList:
-                    nodeID, nodeRelation = self.parsePerTaskExpress(preTask)
-                    if nodeRelation == "FS":
-                        edge = GEdge(startPoint=self.nodesDict.get(str(nodeID)).getFinishSocketPosition(),
-                                     endPoint=self.nodesDict.get(currentNodeID).getStartSocketPosition())
-                        self.edgesDict[nodeID + nodeRelation + str(currentNodeID)] = edge
-                    elif nodeRelation == "FF":
-                        pass
-                    elif nodeRelation == "SS":
-                        pass
-                    elif nodeRelation == "SF":
-                        pass
-            else:
-                return
+    # def updateTaskNode(self, currentBuildingID):
+    #     """
+    #     当切换页面或者编辑任务或，触发此方法，用于刷Node节点数据。
+    #     1、清空页面
+    #     2、加载数据
+    #     3、绘制节点
+    #     4、绘制连线
+    #     :return:
+    #     """
+    #     # 1、清空页面
+    #     self.view.scene.clear()
+    #     self.nodesDict.clear()
+    #     self.edgesDict.clear()
+    #     # 2、加载数据
+    #     decorateTaskList = dmsProject().getTableList(DB_Decorate_Type, filter_str=currentBuildingID)
+    #     # 3、绘制节点
+    #     decorateTask: DB_Decorate_Type
+    #     for decorateTask in decorateTaskList:
+    #         node = GNode(decorateTask)
+    #         node.setPos(decorateTask.node_x, decorateTask.node_y)
+    #         self.nodesDict[node.order] = node
+    #     # 4、绘制连线
+    #     for decorateTask in decorateTaskList:
+    #         currentNodeID = str(decorateTask.order)
+    #
+    #         if len(decorateTask.pre_task) != 0:
+    #             preTaskOrderList = str(decorateTask.pre_task).split(',')
+    #             for preTask in preTaskOrderList:
+    #                 nodeID, nodeRelation = self.parsePerTaskExpress(preTask)
+    #                 if nodeRelation == "FS":
+    #                     edge = GEdge(startPoint=self.nodesDict.get(str(nodeID)).getFinishSocketPosition(),
+    #                                  endPoint=self.nodesDict.get(currentNodeID).getStartSocketPosition())
+    #                     self.edgesDict[nodeID + nodeRelation + str(currentNodeID)] = edge
+    #                 elif nodeRelation == "FF":
+    #                     pass
+    #                 elif nodeRelation == "SS":
+    #                     pass
+    #                 elif nodeRelation == "SF":
+    #                     pass
+    #         else:
+    #             return
 
     def saveTaskNodeDate2DB(self):
         node: GNode
         for node in self.nodesDict.values():
             value = 'order', node.order, node.scenePos().x(), node.scenePos().y()
-            dmsProject().updateRecord(DB_Decorate_Type, value)
+            # todo
 
 
 if __name__ == '__main__':
