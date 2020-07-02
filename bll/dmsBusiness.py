@@ -10,16 +10,21 @@ def customDeleteRecord(_table, _id):
     dmsDatabase().deleteRecord(_record)
 
 
-def newBuilding() -> DB_Building:
+def newBuilding(order: int) -> DB_Building:
     building = DB_Building()
     building.order = dmsDatabase().getCount(DB_Building) + 1
     building.name = building.order.__str__() + '#楼'
+    building.order = order
     if dmsDatabase().addRecord(building):
         return building
 
 
 def updateBuilding(building: DB_Building):
-    dmsDatabase().updateRecord(building)
+    dmsDatabase().updateRecord(building, {"name": building.name, 'order': building.order})
+
+
+def deleteBuilding(building: DB_Building):
+    dmsDatabase().deleteRecordByID(DB_Building, building)
 
 
 def newUnit(building: DB_Building) -> DB_Building_Unit:

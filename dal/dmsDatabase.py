@@ -105,10 +105,10 @@ class DMSDatabase(object):
         return True
 
     # 更新记录
-    def updateRecord(self, filter: str, record):
+    def updateRecord(self, record, newValue: dict):
         if record is None or self.session is None:
             return 0
-        org = self.session.query(type(record)).filter(text(filter)).update()
+        org = self.session.query(type(record)).filter_by(id=record.id).update(newValue)
 
         self.commit()
 
@@ -120,9 +120,10 @@ class DMSDatabase(object):
         self.commit()
         return True
 
-    def deleteRecordByID(self, table, id):
-        if id:
-            self.session.query(table).filter(id == id).delete()
+    def deleteRecordByID(self, table: Base, record):
+        if table and record:
+            res = self.session.query(table).filter_by(id=record.id).delete()
+            self.session.commit()
 
     # 提交
     def commit(self):
