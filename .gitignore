@@ -1,0 +1,8 @@
+/build
+/*.db
+/ipch
+/temp
+/src/*.user
+/src/GeneratedFiles
+/*.opendb
+/.vs/dms/v14/*.suo
