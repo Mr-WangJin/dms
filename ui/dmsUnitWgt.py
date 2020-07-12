@@ -42,7 +42,7 @@ class DMSUnitWgt(QWidget):
         self.groupButton.buttonClicked.connect(self.unitChanged)
 
     def unitChanged(self):
-        self.decorateDataWgt.
+        pass
 
     def initTrigger(self):
         self.ui.pBtnAddUnit.clicked.connect(self.addUnit)
@@ -62,7 +62,7 @@ class DMSUnitWgt(QWidget):
         self.updateUiEnabled()
 
     def getCurrentUnit(self):
-        
+        pass
 
     def addUnit(self):
         unit = newUnit(self.currentBuilding)

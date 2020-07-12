@@ -4,7 +4,6 @@
 from PyQt5.QtWidgets import QWidget
 
 from dal.dmsTables import *
-from ui.ui_decorateDataWgt import Ui_DecorateDataWgt
 from ui.utils import DMSCustomTableView, DMSCustomTableModel
 from ui.utils.dmsCustomData import DMSCustomData
 
@@ -21,7 +20,8 @@ class DMSDecorateDataWgt(DMSCustomTableView):
         # self.ui = Ui_DecorateDataWgt()
         # self.ui.setupUi(self)
 
-    def setCurrentUnit(self, ):
+    def setCurrentUnit(self):
+        pass
 
 
 class DMSDecorateData(DMSCustomData):
