@@ -23,6 +23,12 @@
     <ClCompile Include="Ui\DmsProjectDlg.cpp">
       <Filter>Ui</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_DmsProjectDlg.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_DmsProjectDlg.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -47,9 +53,6 @@
     <ClInclude Include="GeneratedFiles\ui_DmsProjectDlg.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="Ui\DmsProjectDlg.h">
-      <Filter>Ui</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Ui">
@@ -69,6 +72,16 @@
     <Filter Include="Model">
       <UniqueIdentifier>{99795fab-b219-44a3-a618-03da5ce0ae51}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{cd05f8b8-1635-4673-947a-f35327e849fc}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{49fccf20-e9f1-45a9-b515-3e62a7801f3d}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Ui\DmsMainWin.ui">
@@ -78,5 +91,8 @@
       <Filter>Ui</Filter>
     </CustomBuild>
     <CustomBuild Include="dms.qrc" />
+    <CustomBuild Include="Ui\DmsProjectDlg.h">
+      <Filter>Ui</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>
