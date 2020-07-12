@@ -2,6 +2,7 @@
 from typing import List
 
 import sqlalchemy as sa
+from PyQt5.QtWidgets import QAction
 from sqlalchemy import MetaData, text, func
 from sqlalchemy import Table
 from sqlalchemy.schema import *
@@ -62,7 +63,7 @@ class DMSDatabase(object):
     def dbVersion(self):
         pass
 
-    def getTableList(self, table, filter_str=None) -> List:
+    def getTableList(self, table, filter_str: str = '') -> List:
         """
 
         :param table: 获取表记录
@@ -91,7 +92,9 @@ class DMSDatabase(object):
             return max_int
         return items[0].order
 
-        #item = self.session.query(table).from_statement(text("select max(order) from "+table.____tablename__+"")).one_or_none()
+    def getCount(self, table: Base):
+        return self.session.query(table).count()
+        # item = self.session.query(table).from_statement(text("select max(order) from "+table.____tablename__+"")).one_or_none()
 
     # 添加记录
     def addRecord(self, record):
@@ -99,11 +102,14 @@ class DMSDatabase(object):
             return 0
         self.session.add(record)
         self.commit()
+        return True
 
     # 更新记录
-    def updateRecord(self, table, record):
-        filterName, filterValue, recordKey, recordValue = record
-        self.session.query(table).filter_by(filterName=1).update({recordKey: recordValue})
+    def updateRecord(self, record, newValue: dict):
+        if record is None or self.session is None:
+            return 0
+        org = self.session.query(type(record)).filter_by(id=record.id).update(newValue)
+
         self.commit()
 
     # 删除记录
@@ -114,6 +120,10 @@ class DMSDatabase(object):
         self.commit()
         return True
 
+    def deleteRecordByID(self, table: Base, record):
+        if table and record:
+            res = self.session.query(table).filter_by(id=record.id).delete()
+            self.session.commit()
 
     # 提交
     def commit(self):

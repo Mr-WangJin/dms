@@ -14,9 +14,10 @@ class GEdge(QGraphicsPathItem):
     pen = QPen(QColor('#ffffff'), 3)
     selected_pen = QPen(QColor('#222222'), 3)
 
-    def __init__(self, startPoint: QPoint, endPoint: QPoint):
+    def __init__(self, startPoint: QPoint, endPoint: QPoint, edgeType="FS"):
         super().__init__()
         '''socket 用于在绑定了socket情况下的连接线定位'''
+        self.edgeType = edgeType
         self.startGSocket = None
         self.endGSocket = None
         '''position 用于在没有绑定了socket情况下的鼠标位置定位连接线定位'''
@@ -39,22 +40,26 @@ class GEdge(QGraphicsPathItem):
             QPainter.setPen(self.selected_pen) if self.isSelected() else QPainter.setPen(self.pen)
             QPainter.setBrush(Qt.NoBrush)
             QPainter.drawPath(self.path())
-            QPainter.drawLine(self._x2, self._y2, self._x2 - 10, self._y2 - 5)
-            QPainter.drawLine(self._x2, self._y2, self._x2 - 10, self._y2 + 5)
+            '''端部三角箭头'''
+            if self.edgeType.upper() == 'FS':
+                QPainter.drawLine(self._x2, self._y2, self._x2 - 10, self._y2 - 5)
+                QPainter.drawLine(self._x2, self._y2, self._x2 - 10, self._y2 + 5)
+
+
 
     def updatePath(self):
-        if self.startGSocket is not None:
+        if self.startGSocket:
             self._x1 = self.startGSocket.scenePos().x()
             self._y1 = self.startGSocket.scenePos().y()
-        elif self.startPosition is not None:
+        elif self.startPosition:
             self._x1 = self.startPosition.x()
             self._y1 = self.startPosition.y()
         else:
             return False
-        if self.endGSocket is not None:
+        if self.endGSocket:
             self._x2 = self.endGSocket.scenePos().x()
             self._y2 = self.endGSocket.scenePos().y()
-        elif self.endPosition is not None:
+        elif self.endPosition:
             self._x2 = self.endPosition.x()
             self._y2 = self.endPosition.y()
         else:

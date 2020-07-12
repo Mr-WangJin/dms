@@ -31,8 +31,7 @@ class Ui_wgtBuilding(object):
         self.AppTitleWdg.setSizePolicy(sizePolicy)
         self.AppTitleWdg.setMinimumSize(QtCore.QSize(0, 120))
         self.AppTitleWdg.setMaximumSize(QtCore.QSize(16777215, 120))
-        self.AppTitleWdg.setStyleSheet("background-color:#ffffff;\n"
-"border:0px;")
+        self.AppTitleWdg.setStyleSheet("background-color:#ffffff;border:0px;")
         self.AppTitleWdg.setObjectName("AppTitleWdg")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.AppTitleWdg)
         self.horizontalLayout.setContentsMargins(16, 0, 0, 0)

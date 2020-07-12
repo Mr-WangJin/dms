@@ -41,13 +41,13 @@ def excepthook(exc_type, exc_value, exc_tb):
 if __name__ == '__main__':
     # 设置捕获异常
     sys.excepthook = excepthook
-    '''获取系统信息'''
     app = DMSApplication(sys.argv)
     '''加载样式文件'''
     styleFile = 'win.css' if sys.platform.startswith('win') else "mac.css"
-    with open('./style/' + styleFile) as file:
-        styleSheet = file.readlines()
-        styleSheet = ''.join(styleSheet).strip('\n')
+    with open('./resource/qss/' + styleFile) as file:
+        styleSheet = ""
+        for line in file.readlines():
+            styleSheet = styleSheet if line.__contains__('/*') else styleSheet + line
         app.setStyleSheet(styleSheet)
 
     main_form = DMSMainWin()
