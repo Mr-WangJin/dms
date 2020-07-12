@@ -5,6 +5,18 @@
     <ClCompile Include="Ui\DmsMainWin.cpp">
       <Filter>Ui</Filter>
     </ClCompile>
+    <ClCompile Include="Model\DMSDbSession.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\DMSTableContnrBase.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\IDMSTableBase.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\DMSTables.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -13,6 +25,18 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_DmsMainWin.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\DMSDbSession.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\DMSTableContnrBase.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\IDMSTableBase.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\DMSTables.h">
+      <Filter>Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
