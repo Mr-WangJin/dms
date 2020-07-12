@@ -20,10 +20,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Model\DMSDbSession.cpp" />
+    <ClCompile Include="Model\DMSTableContnrBase.cpp" />
+    <ClCompile Include="Model\DMSTables.cpp" />
+    <ClCompile Include="Model\IDMSTableBase.cpp" />
     <ClCompile Include="Ui\DmsMainWin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_DmsMainWin.h" />
+    <ClInclude Include="Model\DMSDbSession.h" />
+    <ClInclude Include="Model\DMSTableContnrBase.h" />
+    <ClInclude Include="Model\DMSTables.h" />
+    <ClInclude Include="Model\IDMSTableBase.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Ui\DmsMainWin.h" />
   </ItemGroup>
