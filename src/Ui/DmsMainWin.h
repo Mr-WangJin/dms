@@ -9,6 +9,8 @@ public:
     ~DmsMainWin();
 
 
+private:
+    bool showProjectUi();
 
 private:
     Ui_DmsMainWin ui;

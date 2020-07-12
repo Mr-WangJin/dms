@@ -15,3 +15,8 @@
 #include <map>
 #include <list>
 #include <functional>
+
+
+#ifndef QT_NAMESPACE
+#define QT_NAMESPACE 1
+#endif // !QT_NAMESPACE

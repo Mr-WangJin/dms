@@ -1,11 +1,6 @@
 #include "stdafx.h"
 #include "DMSDbSession.h"
 
-DMSDbSession::DMSDbSession(const QString & fileName, DatabaseType dbType)
-{
-}
-
-
 static const QString c_sAccessDatabaseName = "DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};FIL={MS Access};dbq=%1"; 
 static const QString c_sField_RecNo = "#RecNo";
 

@@ -17,6 +17,12 @@
     <ClCompile Include="Model\DMSTables.cpp">
       <Filter>Model</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_dms.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ui\DmsProjectDlg.cpp">
+      <Filter>Ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -37,6 +43,12 @@
     </ClInclude>
     <ClInclude Include="Model\DMSTables.h">
       <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_DmsProjectDlg.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ui\DmsProjectDlg.h">
+      <Filter>Ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -62,5 +74,9 @@
     <CustomBuild Include="Ui\DmsMainWin.ui">
       <Filter>Ui</Filter>
     </CustomBuild>
+    <CustomBuild Include="Ui\DmsProjectDlg.ui">
+      <Filter>Ui</Filter>
+    </CustomBuild>
+    <CustomBuild Include="dms.qrc" />
   </ItemGroup>
 </Project>
